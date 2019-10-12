@@ -1054,7 +1054,7 @@ namespace LoggerConfigurator
             if (selectIndex == (int)ExportFormat.EXCEL)
             {
                 filter = "Excel (*.xls)|*.xls";
-                var path = FileSelect.SaveAs(filter);//, "C:\\");
+                var path = FileSelect.SaveAs(filter, "C:\\");
                 if (path == "")
                     return;
                 RadGridViewExport.RunExportToExcelML(path, radGridView);
@@ -1062,7 +1062,7 @@ namespace LoggerConfigurator
             else if (selectIndex == (int)ExportFormat.HTML)
             {
                 filter = "Html File (*.htm)|*.htm";
-                var path = FileSelect.SaveAs(filter);//, "C:\\");
+                var path = FileSelect.SaveAs(filter, "C:\\");
                 if (path == "")
                     return;
                 RadGridViewExport.RunExportToHTML(path, radGridView);
@@ -1070,7 +1070,7 @@ namespace LoggerConfigurator
             else if (selectIndex == (int)ExportFormat.PDF)
             {
                 filter = "PDF file (*.pdf)|*.pdf";
-                var path = FileSelect.SaveAs(filter);//, "C:\\");
+                var path = FileSelect.SaveAs(filter, "C:\\");
                 if (path == "")
                     return;
                 RadGridViewExport.RunExportToPDF(path, radGridView);
@@ -1078,7 +1078,7 @@ namespace LoggerConfigurator
             else if (selectIndex == (int)ExportFormat.CSV)
             {
                 filter = "PDF file (*.pdf)|*.csv";
-                var path = FileSelect.SaveAs(filter);//, "C:\\");
+                var path = FileSelect.SaveAs(filter, "C:\\");
                 if (path == "")
                     return;
                 RadGridViewExport.RunExportToCSV(path, radGridView);
