@@ -28,6 +28,8 @@ using AnalysisAgreeMent.Analysis;
 using System.IO;
 using LoggerConfigurator.Model;
 using LoggerConfigurator.View;
+using WindowsFormTelerik.GridViewExportData;
+using WindowsFormTelerik.CommonUI;
 
 namespace LoggerConfigurator
 {
@@ -80,6 +82,7 @@ namespace LoggerConfigurator
             this.radGridView_can2.ValueChanged += RadGridView_can2_ValueChanged;
 
             this.tool_exportfile.Click += Tool_exportfile_Click;
+            this.tool_exportGridView.Click += Tool_exportGridView_Click;
             this.tool_openFile.Click += Tool_openFile_Click;
             this.tool_search.Click += Tool_search_Click;
             this.menu_logger_manager.Click += Menu_logger_manager_Click;
@@ -88,6 +91,40 @@ namespace LoggerConfigurator
             this.cb_protocol_can1.SelectedIndexChanged += Cb_protocol_can1_SelectedIndexChanged;
             this.cb_protocol_can2.SelectedIndexChanged += Cb_protocol_can2_SelectedIndexChanged;
             this.radDock1.DockStateChanged += RadDock1_DockStateChanged;
+
+            this.menu_helper.Click += Menu_helper_Click;
+            this.menu_abort.Click += Menu_abort_Click;
+        }
+
+        private void Menu_abort_Click(object sender, EventArgs e)
+        {
+            var titleText = "Abort FigKey Logger Configurator Upper Computer";
+            var productName = "Logger Configurator Upper Computer";
+            var companyName = "丰柯电子科技(上海)有限公司重庆分公司";
+            var copyRight = "FigKey";
+            var describle = "Upper Computer for Logger Configurator";
+            AboutBox aboutBox1 = new AboutBox(titleText,productName,companyName,copyRight,describle);
+            aboutBox1.Show();
+        }
+
+        private void Menu_helper_Click(object sender, EventArgs e)
+        {
+            Helper fHelp = new Helper();
+            fHelp.Show();
+        }
+
+        private void Tool_exportGridView_Click(object sender, EventArgs e)
+        {
+            GridViewExport.ExportFormat exportFormat = GridViewExport.ExportFormat.EXCEL;
+            Enum.TryParse(this.tool_exportfile.Text,out exportFormat);
+            if (selectedCan == CurrentCanType.CAN1)
+            {
+                GridViewExport.ExportGridViewData(exportFormat, this.radGridView_can1);
+            }
+            else if (selectedCan == CurrentCanType.CAN2)
+            {
+                GridViewExport.ExportGridViewData(exportFormat, this.radGridView_can2);
+            }
         }
 
         private void RadDock1_DockStateChanged(object sender, DockWindowEventArgs e)
@@ -223,6 +260,11 @@ namespace LoggerConfigurator
 
             lbx_protocol_remark.Text += "DBC时配置波特率有效，XCP直接从文件读取，配置无效";
             canProtocolDataSourchList = new List<Dictionary<CurrentCanType, CanProtocolDataEntity>>();
+
+            this.tool_exportFilter.Text = GridViewExport.ExportFormat.EXCEL.ToString();
+            this.tool_exportFilter.Text = GridViewExport.ExportFormat.CSV.ToString();
+            this.tool_exportFilter.Text = GridViewExport.ExportFormat.HTML.ToString();
+            this.tool_exportFilter.Text = GridViewExport.ExportFormat.PDF.ToString();
         }
 
         #region 复选框行值处理
@@ -1047,49 +1089,5 @@ namespace LoggerConfigurator
             }
         }
         #endregion
-
-        private void ExportGridViewData(int selectIndex, RadGridView radGridView)
-        {
-            var filter = "Excel (*.xls)|*.xls";
-            if (selectIndex == (int)ExportFormat.EXCEL)
-            {
-                filter = "Excel (*.xls)|*.xls";
-                var path = FileSelect.SaveAs(filter, "C:\\");
-                if (path == "")
-                    return;
-                RadGridViewExport.RunExportToExcelML(path, radGridView);
-            }
-            else if (selectIndex == (int)ExportFormat.HTML)
-            {
-                filter = "Html File (*.htm)|*.htm";
-                var path = FileSelect.SaveAs(filter, "C:\\");
-                if (path == "")
-                    return;
-                RadGridViewExport.RunExportToHTML(path, radGridView);
-            }
-            else if (selectIndex == (int)ExportFormat.PDF)
-            {
-                filter = "PDF file (*.pdf)|*.pdf";
-                var path = FileSelect.SaveAs(filter, "C:\\");
-                if (path == "")
-                    return;
-                RadGridViewExport.RunExportToPDF(path, radGridView);
-            }
-            else if (selectIndex == (int)ExportFormat.CSV)
-            {
-                filter = "PDF file (*.pdf)|*.csv";
-                var path = FileSelect.SaveAs(filter, "C:\\");
-                if (path == "")
-                    return;
-                RadGridViewExport.RunExportToCSV(path, radGridView);
-            }
-        }
-        private enum ExportFormat
-        {
-            EXCEL,
-            HTML,
-            PDF,
-            CSV
-        }
     }
 }
