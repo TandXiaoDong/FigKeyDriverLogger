@@ -23,10 +23,7 @@ namespace LoggerConfigurator
 
         private void Test_Load(object sender, EventArgs e)
         {
-            //string sql = "SELECT * from t_user";
-            string sql = ConfigurationManager.AppSettings["sql"].ToString();
-
-            dataGridView1.DataSource = Query(sql,50).Tables["ds"];
+            
         }
 
         public static DataSet Query(string SQLString, int outTime)
