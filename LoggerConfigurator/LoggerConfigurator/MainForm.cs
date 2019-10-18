@@ -30,6 +30,7 @@ using LoggerConfigurator.Model;
 using LoggerConfigurator.View;
 using WindowsFormTelerik.GridViewExportData;
 using WindowsFormTelerik.CommonUI;
+using LoggerConfigurator.MQTTNet;
 
 namespace LoggerConfigurator
 {
@@ -56,10 +57,23 @@ namespace LoggerConfigurator
         private Dictionary<string, string> canDicCheckState_13;
         //private Dictionary<string, string> can2DicCheckState_12;
         private List<Dictionary<CurrentCanType, CanProtocolDataEntity>> canProtocolDataSourchList;
-        
+        private List<DeviceConfig> deviceConfigList;
         private CurrentCanType selectedCan = CurrentCanType.NONE;//当前选择的CAN，CAN1或CAN2两种情况
         private bool IsFirstOppendCan1 = true, IsFirstOppendCan2 = true;
+        private MqttNetClient mqttNetClient;
+        private const string DEVICE_CONFIG_FILE = "deviceCfg.ini";
+        private const string MQTT_CONFIG_FILE = "mqttCfg.ini";
+        private const string SECTION_DEVICE_CONFIG = "DEVICE";
+        private const string KEY_DEVICE_ID = "device_";
+        private const string KEY_DEVICE_COUNT = "count";
+        private const string SECTION_MQTT_BASIC = "MQTT_BASIC";
+        private const string SECTION_MQTT_SERVER_TOPIC = "MQTT_SERVER_TOPIC";
+        private const string SECTION_MQTT_SERVER_TOPIC_DIRECTORY = "MQTT_SERVER_TOPIC_DIRECTORY";
+        private const string SECTION_MQTT_SERVER_TOPIC_CONFIG_FILE = "MQTT_SERVER_TOPIC_CONFIG_FILE";
+        private const string SECTION_MQTT_CLIENT_TOPIC = "MQTT_CLIENT_TOPIC";
+        private const string SECTION_MQTT_CLIENT_TOPIC_DIRECTORY = "";
         #endregion
+
         public MainForm()
         {
             InitializeComponent();
@@ -69,6 +83,7 @@ namespace LoggerConfigurator
         public void Init()
         {
             Initial();
+            InitConfig();
             LoadTreeView();
             LoadRadGridView();
         }
@@ -94,6 +109,20 @@ namespace LoggerConfigurator
 
             this.menu_helper.Click += Menu_helper_Click;
             this.menu_abort.Click += Menu_abort_Click;
+            this.FormClosed += MainForm_FormClosed;
+        }
+
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            //保存最新配置
+            var configPath = AppDomain.CurrentDomain.BaseDirectory+"Config\\";
+            if (!Directory.Exists(configPath))
+                Directory.CreateDirectory(configPath);
+            //device config,先配置所有设备
+            INIFile.SetValue(SECTION_DEVICE_CONFIG,SECTION_DEVICE_ID,configPath+ DEVICE_CONFIG_FILE);
+
+            //Mqtt config params
+            INIFile.SetValue(MQTT_SERVER_TOPIC,MQTT_SERVER_TOPIC_DIRECTORY,mqttNetClient.PassWord,configPath+MQTT_CONFIG_FILE);
         }
 
         private void Menu_abort_Click(object sender, EventArgs e)
@@ -265,6 +294,36 @@ namespace LoggerConfigurator
             this.tool_exportFilter.Text = GridViewExport.ExportFormat.CSV.ToString();
             this.tool_exportFilter.Text = GridViewExport.ExportFormat.HTML.ToString();
             this.tool_exportFilter.Text = GridViewExport.ExportFormat.PDF.ToString();
+        }
+
+        private void InitConfig()
+        {
+            deviceConfigList = new List<DeviceConfig>();
+            mqttNetClient = new MqttNetClient();
+            var configPath = AppDomain.CurrentDomain.BaseDirectory;
+            var devicePath = configPath + DEVICE_CONFIG_FILE;
+            //read device config
+            if (File.Exists(devicePath))
+            {
+                var deviceCount = INIFile.GetValue(SECTION_DEVICE_CONFIG,KEY_DEVICE_COUNT,devicePath);
+                int count;
+                if (int.TryParse(deviceCount, out count))
+                {
+                    for (int i = 0; i < count; i++)
+                    {
+                        var deviceId = INIFile.GetValue(SECTION_DEVICE_CONFIG,KEY_DEVICE_ID+(i+1),devicePath);
+                        DeviceConfig deviceConfig = new DeviceConfig();
+                        deviceConfig.DeviceId = deviceId;
+                        deviceConfig.DeviceCount = deviceCount;
+                        deviceConfigList.Add(deviceConfig);
+                    }
+                }
+                else
+                {
+                    LogHelper.Log.Error("【读配置】配置设备数量错误");
+                }
+            }
+            //read mqtt config
         }
 
         #region 复选框行值处理

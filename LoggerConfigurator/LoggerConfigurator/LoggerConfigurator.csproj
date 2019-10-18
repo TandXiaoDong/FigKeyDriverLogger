@@ -336,8 +336,8 @@
     <Compile Include="Control\ExportFile.cs" />
     <Compile Include="Control\GridViewControl.cs" />
     <Compile Include="Control\TreeViewControl.cs" />
-    <Compile Include="MQTTNet\MqttnetClient.cs" />
-    <Compile Include="MQTTNet\MqttNetClientHelper.cs" />
+    <Compile Include="Model\DeviceConfig.cs" />
+    <Compile Include="MQTTNet\MqttNetClient.cs" />
     <Compile Include="RadGridViewExport.cs" />
     <Compile Include="ExportSet.cs">
       <SubType>Form</SubType>

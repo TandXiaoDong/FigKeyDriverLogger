@@ -13,6 +13,7 @@ namespace WinTest.cs
 {
     public partial class Form1 : Form
     {
+        private MqttNetClient mqttNetClient;
         public Form1()
         {
             InitializeComponent();
@@ -23,6 +24,7 @@ namespace WinTest.cs
             this.tb_topic.Text = "China/Hunan/Yiyang/Nanxian";
             this.tb_pushTopic.Text = "China/Hunan/Yiyang/Nanxian";
             this.tb_psContent.Text = "this.if.config";
+            mqttNetClient = new MqttNetClient();
             this.FormClosed += Form1_FormClosed;
         }
 
@@ -41,12 +43,13 @@ namespace WinTest.cs
         private void button2_Click(object sender, EventArgs e)
         {
             //发布
-            MqttNetClientHelper.Publish(this.tb_pushTopic.Text,this.tb_psContent.Text);
+            mqttNetClient.StartClient();
+            mqttNetClient.Publish();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            MqttNetClientHelper.Start();
+            mqttNetClient.SubscribeMessage();
         }
     }
 }
