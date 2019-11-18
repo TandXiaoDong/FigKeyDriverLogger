@@ -43,8 +43,8 @@ namespace WinTest.cs
         private void button2_Click(object sender, EventArgs e)
         {
             //发布
-            mqttNetClient.StartClient();
-            mqttNetClient.Publish();
+            //mqttNetClient.StartClient();
+            //mqttNetClient.Publish();
         }
 
         private void button3_Click(object sender, EventArgs e)

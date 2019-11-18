@@ -33,3 +33,9 @@ topic=config/command
 客户端全部订阅
 1）p1向p2发送消息命令：p1发布command主题消息
 2）p2向p1发送信息：p2发布config主题消息
+
+
+连接MQTT服务器
+查询所有配置好的设备
+查询所有设备状态
+查询所有订阅

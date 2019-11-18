@@ -15,14 +15,16 @@ using MQTTnet.Client.Connecting;
 using CommonUtils.Logger;
 
 
-namespace LoggerConfigurator.MQTTNet
+namespace MQTTTest.MQTTNet
 {
     public class MqttNetClient
     {
         #region mqtt 参数
-        private static MqttClient mqttClient = null;
-        private static IMqttClientOptions options = null;
+        //private MqttClient mqttClient = null;
 
+        //private IMqttClientOptions options = null;
+
+        private bool IsConnectionSuccessful;
         /// <summary>
         /// 服务器IP
         /// </summary>
@@ -47,6 +49,13 @@ namespace LoggerConfigurator.MQTTNet
         /// 保留
         /// </summary>
         private bool retained = false;
+
+        private StringBuilder receiveMessage;
+
+        /// <summary>
+        /// 服务器名称
+        /// </summary>
+        private string serverName = "myBroker";
         /// <summary>
         /// 服务质量
         /// <para>0 - 至多一次</para>
@@ -55,6 +64,22 @@ namespace LoggerConfigurator.MQTTNet
         /// </summary>
         private MqttQualityOfServiceLevel mqttQualityLevel =  MqttQualityOfServiceLevel.AtMostOnce;
 
+
+        public MqttClient MqttClientObj { get; set; }
+
+        public IMqttClientOptions MqttClientOptions { get; set; }
+
+        public bool IsConnectionSuccess
+        {
+            get { return this.IsConnectionSuccessful; }
+            set { this.IsConnectionSuccessful = value; }
+        }
+
+        public string ServerName
+        {
+            get { return this.serverName; }
+            set { this.serverName = value; }
+        }
 
         public string ServerUrl
         {
@@ -98,6 +123,12 @@ namespace LoggerConfigurator.MQTTNet
             set { this.retained = value; }
         }
 
+        public StringBuilder ReceiveMessage
+        {
+            get { return this.receiveMessage; }
+            set { this.receiveMessage = value; }
+        }
+
         /// <summary>
         /// 字符串消息
         /// </summary>
@@ -109,33 +140,45 @@ namespace LoggerConfigurator.MQTTNet
         public byte[] PushMessageByte { get; set; }
         #endregion
 
+        private MqttNetClient mqttNetClient;
+
+        public MqttNetClient()
+        {
+        }
+
         /// <summary>
         /// 启动客户端，连接服务
         /// </summary>
-        public void StartClient()
+        public void StartConnection(MqttNetClient mqttNetClient)
         {
             LogHelper.Log.Info("Work >>Begin");
             try
             {
+                this.mqttNetClient = mqttNetClient;
                 var factory = new MqttFactory();
-                mqttClient = factory.CreateMqttClient() as MqttClient;
+                mqttNetClient.MqttClientObj = factory.CreateMqttClient() as MqttClient;
 
-                options = new MqttClientOptionsBuilder()
-                    .WithTcpServer(ServerUrl, Port)
-                    .WithCredentials(UserID, PassWord)
+                mqttNetClient.MqttClientOptions = new MqttClientOptionsBuilder()
+                    .WithTcpServer(mqttNetClient.ServerUrl, mqttNetClient.Port)
+                    .WithCredentials(mqttNetClient.UserID, mqttNetClient.PassWord)
                     .WithClientId(Guid.NewGuid().ToString().Substring(0, 5))
                     .Build();
 
-                mqttClient.ConnectAsync(options);
-                mqttClient.ConnectedHandler = new MqttClientConnectedHandlerDelegate(new Func<MqttClientConnectedEventArgs, Task>(Connected));
-                mqttClient.DisconnectedHandler = new MqttClientDisconnectedHandlerDelegate(new Func<MqttClientDisconnectedEventArgs, Task>(Disconnected));
-                mqttClient.ApplicationMessageReceivedHandler = new MqttApplicationMessageReceivedHandlerDelegate(new Action<MqttApplicationMessageReceivedEventArgs>(MqttApplicationMessageReceived));
+                mqttNetClient.MqttClientObj.ConnectAsync(mqttNetClient.MqttClientOptions);
+                mqttNetClient.MqttClientObj.ConnectedHandler = new MqttClientConnectedHandlerDelegate(new Func<MqttClientConnectedEventArgs, Task>(Connected));
+                mqttNetClient.MqttClientObj.DisconnectedHandler = new MqttClientDisconnectedHandlerDelegate(new Func<MqttClientDisconnectedEventArgs, Task>(Disconnected));
+                mqttNetClient.MqttClientObj.ApplicationMessageReceivedHandler = new MqttApplicationMessageReceivedHandlerDelegate(new Action<MqttApplicationMessageReceivedEventArgs>(MqttApplicationMessageReceived));
             }
             catch (Exception exp)
             {
                 LogHelper.Log.Error(exp.Message);
             }
             LogHelper.Log.Info("Work >>End");
+        }
+
+        async public void StopConnection()
+        {
+            await mqttNetClient.MqttClientObj.DisconnectAsync();
         }
 
         /// <summary>
@@ -147,11 +190,11 @@ namespace LoggerConfigurator.MQTTNet
         {
             try
             {
-                if (mqttClient == null) return;
-                if (mqttClient.IsConnected == false)
-                    await mqttClient.ConnectAsync(options);
+                if (mqttNetClient.MqttClientObj == null) return;
+                if (mqttNetClient.MqttClientObj.IsConnected == false)
+                    await mqttNetClient.MqttClientObj.ConnectAsync(mqttNetClient.MqttClientOptions);
 
-                if (mqttClient.IsConnected == false)
+                if (mqttNetClient.MqttClientObj.IsConnected == false)
                 {
                     LogHelper.Log.Info("Publish >>Connected Failed! ");
                     return;
@@ -165,7 +208,7 @@ namespace LoggerConfigurator.MQTTNet
                         .WithRetainFlag(Remain)
                         .WithAtMostOnceQoS()
                         .Build();
-                    await mqttClient.PublishAsync(mamb);
+                    await mqttNetClient.MqttClientObj.PublishAsync(mamb);
                 }
                 else if (MqttQualityLevel == MqttQualityOfServiceLevel.AtLeastOnce)
                 {
@@ -175,7 +218,7 @@ namespace LoggerConfigurator.MQTTNet
                         .WithRetainFlag(Remain)
                         .WithAtLeastOnceQoS()
                         .Build();
-                    mqttClient.PublishAsync(mamb);
+                    await mqttNetClient.MqttClientObj.PublishAsync(mamb);
                 }
                 else if (MqttQualityLevel == MqttQualityOfServiceLevel.ExactlyOnce)
                 {
@@ -185,7 +228,7 @@ namespace LoggerConfigurator.MQTTNet
                         .WithRetainFlag(retained)
                         .WithExactlyOnceQoS()
                         .Build();
-                    mqttClient.PublishAsync(mamb);
+                    await mqttNetClient.MqttClientObj.PublishAsync(mamb);
                 }
             }
             catch (Exception exp)
@@ -203,11 +246,11 @@ namespace LoggerConfigurator.MQTTNet
         {
             try
             {
-                if (mqttClient == null) return;
-                if (mqttClient.IsConnected == false)
-                    mqttClient.ConnectAsync(options);
+                if (mqttNetClient.MqttClientObj == null) return;
+                if (mqttNetClient.MqttClientObj.IsConnected == false)
+                    await mqttNetClient.MqttClientObj.ConnectAsync(mqttNetClient.MqttClientOptions);
 
-                if (mqttClient.IsConnected == false)
+                if (mqttNetClient.MqttClientObj.IsConnected == false)
                 {
                     LogHelper.Log.Info("Publish >>Connected Failed! ");
                     return;
@@ -220,7 +263,7 @@ namespace LoggerConfigurator.MQTTNet
                         .WithRetainFlag(Remain)
                         .WithAtMostOnceQoS()
                         .Build();
-                    mqttClient.PublishAsync(mamb);
+                    await mqttNetClient.MqttClientObj.PublishAsync(mamb);
                 }
                 else if (MqttQualityLevel ==  MqttQualityOfServiceLevel.AtLeastOnce)
                 {
@@ -230,7 +273,7 @@ namespace LoggerConfigurator.MQTTNet
                         .WithRetainFlag(Remain)
                         .WithAtLeastOnceQoS()
                         .Build();
-                    mqttClient.PublishAsync(mamb);
+                    await mqttNetClient.MqttClientObj.PublishAsync(mamb);
                 }
                 else if (MqttQualityLevel == MqttQualityOfServiceLevel.ExactlyOnce)
                 {
@@ -240,7 +283,7 @@ namespace LoggerConfigurator.MQTTNet
                         .WithRetainFlag(Remain)
                         .WithExactlyOnceQoS()
                         .Build();
-                    mqttClient.PublishAsync(mamb);
+                    await mqttNetClient.MqttClientObj.PublishAsync(mamb);
                 }
             }
             catch (Exception exp)
@@ -257,20 +300,20 @@ namespace LoggerConfigurator.MQTTNet
         {
             try
             {
-                if (mqttClient == null)
+                if (mqttNetClient.MqttClientObj == null)
                     return;
-                if (mqttClient.IsConnected == false)
-                    await mqttClient.ConnectAsync(options);
+                if (mqttNetClient.MqttClientObj.IsConnected == false)
+                    await mqttNetClient.MqttClientObj.ConnectAsync(mqttNetClient.MqttClientOptions);
 
-                if (mqttClient.IsConnected == false)
+                if (mqttNetClient.MqttClientObj.IsConnected == false)
                 {
                     LogHelper.Log.Info("Publish >>Connected Failed! ");
                     return;
                 }
                 List<TopicFilter> listTopic = new List<TopicFilter>();
-                if (Topic.Count() > 0)
+                if (mqttNetClient.Topic.Count() > 0)
                 {
-                    foreach (var topic in Topic)
+                    foreach (var topic in mqttNetClient.Topic)
                     {
                         if (MqttQualityLevel ==  MqttQualityOfServiceLevel.AtMostOnce)
                         {
@@ -292,7 +335,7 @@ namespace LoggerConfigurator.MQTTNet
                         }
                     }
                 }
-                await mqttClient.SubscribeAsync(listTopic.ToArray());
+                await mqttNetClient.MqttClientObj.SubscribeAsync(listTopic.ToArray());
             }
             catch (Exception exp)
             {
@@ -305,10 +348,12 @@ namespace LoggerConfigurator.MQTTNet
         /// </summary>
         /// <param name="e"></param>
         /// <returns></returns>
-        private static async Task Connected(MqttClientConnectedEventArgs e)
+        private async Task Connected(MqttClientConnectedEventArgs e)
         {
             try
             {
+                mqttNetClient.IsConnectionSuccessful = true;
+                await Task.Delay(TimeSpan.FromSeconds(5));
                 LogHelper.Log.Info("Connected >>Success");
             }
             catch (Exception exp)
@@ -322,15 +367,16 @@ namespace LoggerConfigurator.MQTTNet
         /// </summary>
         /// <param name="e"></param>
         /// <returns></returns>
-        private static async Task Disconnected(MqttClientDisconnectedEventArgs e)
+        private async Task Disconnected(MqttClientDisconnectedEventArgs e)
         {
             try
             {
                 LogHelper.Log.Info("Disconnected >>Disconnected Server");
+                mqttNetClient.IsConnectionSuccessful = false;
                 await Task.Delay(TimeSpan.FromSeconds(5));
                 try
                 {
-                    await mqttClient.ConnectAsync(options);
+                    await mqttNetClient.MqttClientObj.ConnectAsync(mqttNetClient.MqttClientOptions);
                 }
                 catch (Exception exp)
                 {

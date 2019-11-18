@@ -62,16 +62,19 @@ namespace LoggerConfigurator
         private bool IsFirstOppendCan1 = true, IsFirstOppendCan2 = true;
         private MqttNetClient mqttNetClient;
         private const string DEVICE_CONFIG_FILE = "deviceCfg.ini";
-        private const string MQTT_CONFIG_FILE = "mqttCfg.ini";
+        private const string MQTT_CLIENT_CONFIG_FILE = "mqttClientCfg.ini";
+        private const string MQTT_SERVER_CONFIG_FILE = "mqttServerCfg.ini";
         private const string SECTION_DEVICE_CONFIG = "DEVICE";
         private const string KEY_DEVICE_ID = "device_";
         private const string KEY_DEVICE_COUNT = "count";
         private const string SECTION_MQTT_BASIC = "MQTT_BASIC";
-        private const string SECTION_MQTT_SERVER_TOPIC = "MQTT_SERVER_TOPIC";
-        private const string SECTION_MQTT_SERVER_TOPIC_DIRECTORY = "MQTT_SERVER_TOPIC_DIRECTORY";
-        private const string SECTION_MQTT_SERVER_TOPIC_CONFIG_FILE = "MQTT_SERVER_TOPIC_CONFIG_FILE";
-        private const string SECTION_MQTT_CLIENT_TOPIC = "MQTT_CLIENT_TOPIC";
-        private const string SECTION_MQTT_CLIENT_TOPIC_DIRECTORY = "";
+        private const string KEY_MQTT_TOPIC_DIRECTORY = "mqtt_topic_directory";
+        private const string KEY_MQTT_TOPIC_CONFIG_FILE = "mqtt_topic_config";
+        private const string KEY_MQTT_TOPIC_COMMAND = "mqtt_topic_command";
+        private string mqttServerTopicDirectory = "/logger/server/directory";
+        private string mqttServerTopicConfigFile = "/logger/server/sourchFile";
+        private string mqttClientTopicCommand = "/logger/client/command";
+        private string mqttClientTopicConfigFile = "/logger/client/sourchFile";
         #endregion
 
         public MainForm()
@@ -119,10 +122,21 @@ namespace LoggerConfigurator
             if (!Directory.Exists(configPath))
                 Directory.CreateDirectory(configPath);
             //device config,先配置所有设备
-            INIFile.SetValue(SECTION_DEVICE_CONFIG,SECTION_DEVICE_ID,configPath+ DEVICE_CONFIG_FILE);
-
-            //Mqtt config params
-            INIFile.SetValue(MQTT_SERVER_TOPIC,MQTT_SERVER_TOPIC_DIRECTORY,mqttNetClient.PassWord,configPath+MQTT_CONFIG_FILE);
+            //格式：deviceid_1/2/3...;count
+            if (deviceConfigList.Count > 0)
+            {
+                for (int i = 0; i < deviceConfigList.Count; i++)
+                {
+                    INIFile.SetValue(SECTION_DEVICE_CONFIG, KEY_DEVICE_ID + (i + 1), deviceConfigList[i].DeviceId, configPath + DEVICE_CONFIG_FILE);
+                    INIFile.SetValue(SECTION_DEVICE_CONFIG, KEY_DEVICE_COUNT, deviceConfigList[i].DeviceCount, configPath + DEVICE_CONFIG_FILE);
+                    //Mqtt config params
+                    //server
+                    INIFile.SetValue(deviceConfigList[i].DeviceId, KEY_MQTT_TOPIC_DIRECTORY, deviceConfigList[i].DeviceId + mqttServerTopicDirectory, configPath + MQTT_SERVER_CONFIG_FILE);
+                    INIFile.SetValue(deviceConfigList[i].DeviceId, KEY_MQTT_TOPIC_CONFIG_FILE, deviceConfigList[i].DeviceId + mqttServerTopicConfigFile, configPath + MQTT_SERVER_CONFIG_FILE);
+                    //client
+                    INIFile.SetValue(deviceConfigList[i].DeviceId, KEY_MQTT_TOPIC_COMMAND, deviceConfigList[i].DeviceId + mqttClientTopicCommand, configPath + MQTT_CLIENT_CONFIG_FILE);
+                }
+            }
         }
 
         private void Menu_abort_Click(object sender, EventArgs e)
@@ -300,28 +314,51 @@ namespace LoggerConfigurator
         {
             deviceConfigList = new List<DeviceConfig>();
             mqttNetClient = new MqttNetClient();
-            var configPath = AppDomain.CurrentDomain.BaseDirectory;
+            var configPath = AppDomain.CurrentDomain.BaseDirectory + "Config\\";
             var devicePath = configPath + DEVICE_CONFIG_FILE;
+            var mqttServerCfgPath = configPath + MQTT_SERVER_CONFIG_FILE;
+            var mqttClientCfgPath = configPath + MQTT_CLIENT_CONFIG_FILE;
             //read device config
             if (File.Exists(devicePath))
             {
-                var deviceCount = INIFile.GetValue(SECTION_DEVICE_CONFIG,KEY_DEVICE_COUNT,devicePath);
+                var deviceCount = INIFile.GetValue(SECTION_DEVICE_CONFIG, KEY_DEVICE_COUNT, devicePath);
                 int count;
                 if (int.TryParse(deviceCount, out count))
                 {
                     for (int i = 0; i < count; i++)
                     {
-                        var deviceId = INIFile.GetValue(SECTION_DEVICE_CONFIG,KEY_DEVICE_ID+(i+1),devicePath);
+                        var deviceId = INIFile.GetValue(SECTION_DEVICE_CONFIG, KEY_DEVICE_ID + (i + 1), devicePath);
                         DeviceConfig deviceConfig = new DeviceConfig();
                         deviceConfig.DeviceId = deviceId;
                         deviceConfig.DeviceCount = deviceCount;
                         deviceConfigList.Add(deviceConfig);
+                        //read mqtt config 
+                        if (File.Exists(mqttServerCfgPath))
+                        {
+                            mqttServerTopicDirectory = INIFile.GetValue(deviceId, KEY_MQTT_TOPIC_DIRECTORY, mqttServerCfgPath);
+                            mqttServerTopicConfigFile = INIFile.GetValue(deviceId, KEY_MQTT_TOPIC_CONFIG_FILE, mqttServerCfgPath);
+                        }
+                        if (File.Exists(mqttClientCfgPath))
+                        {
+                            mqttClientTopicCommand = INIFile.GetValue(deviceId, KEY_MQTT_TOPIC_COMMAND, mqttClientCfgPath);
+                        }
                     }
                 }
                 else
                 {
                     LogHelper.Log.Error("【读配置】配置设备数量错误");
                 }
+            }
+            else
+            {
+                if (!Directory.Exists(configPath))
+                {
+                    Directory.CreateDirectory(configPath);
+                }
+                //set config default
+                INIFile.SetValue(SECTION_DEVICE_CONFIG, KEY_DEVICE_ID + 1, "qdhk001", configPath + DEVICE_CONFIG_FILE);
+                INIFile.SetValue(SECTION_DEVICE_CONFIG, KEY_DEVICE_COUNT, "1", configPath + DEVICE_CONFIG_FILE);
+                InitConfig();
             }
             //read mqtt config
         }

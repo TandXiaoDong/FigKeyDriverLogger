@@ -380,6 +380,12 @@
     <Compile Include="View\AboutBox1.Designer.cs">
       <DependentUpon>AboutBox1.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\ConnectServer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\ConnectServer.Designer.cs">
+      <DependentUpon>ConnectServer.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\MulDocumentWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -447,6 +453,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\AboutBox1.resx">
       <DependentUpon>AboutBox1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\ConnectServer.resx">
+      <DependentUpon>ConnectServer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\RadAboutBox1.resx">
       <DependentUpon>RadAboutBox1.cs</DependentUpon>
