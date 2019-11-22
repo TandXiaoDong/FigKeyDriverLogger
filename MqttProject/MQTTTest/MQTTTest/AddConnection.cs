@@ -74,6 +74,9 @@ namespace MQTTTest
                 {
                     Broker broker = new Broker(mqttNetClient);
                     broker.ShowDialog();
+                    timer.Enabled = false;
+                    waitConnectTime = 0;
+                    timer.Stop();
                     break;
                 }
                 else

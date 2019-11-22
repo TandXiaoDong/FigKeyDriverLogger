@@ -28,15 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition3 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition4 = new Telerik.WinControls.UI.TableViewDefinition();
             this.radLabel1 = new Telerik.WinControls.UI.RadLabel();
             this.radLabel3 = new Telerik.WinControls.UI.RadLabel();
             this.radLabel2 = new Telerik.WinControls.UI.RadLabel();
             this.tb_subscribe = new Telerik.WinControls.UI.RadTextBox();
-            this.cb_subscribe_level = new System.Windows.Forms.ComboBox();
             this.breezeTheme1 = new Telerik.WinControls.Themes.BreezeTheme();
             this.btn_subscribe = new Telerik.WinControls.UI.RadButton();
             this.btn_publish = new Telerik.WinControls.UI.RadButton();
-            this.cb_publish_level = new System.Windows.Forms.ComboBox();
             this.tb_publishTopic = new Telerik.WinControls.UI.RadTextBox();
             this.radLabel4 = new Telerik.WinControls.UI.RadLabel();
             this.tb_publishMessage = new Telerik.WinControls.UI.RadTextBox();
@@ -44,9 +44,10 @@
             this.radLabel5 = new Telerik.WinControls.UI.RadLabel();
             this.btn_openFile = new Telerik.WinControls.UI.RadButton();
             this.radLabel6 = new Telerik.WinControls.UI.RadLabel();
-            this.radCollapsiblePanel1 = new Telerik.WinControls.UI.RadCollapsiblePanel();
             this.materialTheme1 = new Telerik.WinControls.Themes.MaterialTheme();
-            this.radTextBox1 = new Telerik.WinControls.UI.RadTextBox();
+            this.tb_receiveMsg = new Telerik.WinControls.UI.RadTextBox();
+            this.cb_subscribe_level = new Telerik.WinControls.UI.RadMultiColumnComboBox();
+            this.cb_publish_level = new Telerik.WinControls.UI.RadMultiColumnComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel2)).BeginInit();
@@ -60,9 +61,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.radLabel5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_openFile)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel6)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radCollapsiblePanel1)).BeginInit();
-            this.radCollapsiblePanel1.PanelContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.radTextBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tb_receiveMsg)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cb_subscribe_level)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cb_subscribe_level.EditorControl)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cb_subscribe_level.EditorControl.MasterTemplate)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cb_publish_level)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cb_publish_level.EditorControl)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cb_publish_level.EditorControl.MasterTemplate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
@@ -97,56 +102,34 @@
             // 
             this.tb_subscribe.Location = new System.Drawing.Point(12, 80);
             this.tb_subscribe.Name = "tb_subscribe";
-            this.tb_subscribe.Size = new System.Drawing.Size(504, 36);
+            this.tb_subscribe.Size = new System.Drawing.Size(483, 36);
             this.tb_subscribe.TabIndex = 4;
             this.tb_subscribe.Text = "#";
             this.tb_subscribe.ThemeName = "Material";
             // 
-            // cb_subscribe_level
-            // 
-            this.cb_subscribe_level.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.cb_subscribe_level.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.cb_subscribe_level.FormattingEnabled = true;
-            this.cb_subscribe_level.ItemHeight = 25;
-            this.cb_subscribe_level.Location = new System.Drawing.Point(522, 83);
-            this.cb_subscribe_level.Name = "cb_subscribe_level";
-            this.cb_subscribe_level.Size = new System.Drawing.Size(151, 33);
-            this.cb_subscribe_level.TabIndex = 5;
-            // 
             // btn_subscribe
             // 
-            this.btn_subscribe.Location = new System.Drawing.Point(679, 83);
+            this.btn_subscribe.Location = new System.Drawing.Point(679, 80);
             this.btn_subscribe.Name = "btn_subscribe";
-            this.btn_subscribe.Size = new System.Drawing.Size(92, 33);
+            this.btn_subscribe.Size = new System.Drawing.Size(92, 36);
             this.btn_subscribe.TabIndex = 6;
             this.btn_subscribe.Text = "SUBSCRIBE";
             this.btn_subscribe.ThemeName = "Breeze";
             // 
             // btn_publish
             // 
-            this.btn_publish.Location = new System.Drawing.Point(679, 170);
+            this.btn_publish.Location = new System.Drawing.Point(679, 167);
             this.btn_publish.Name = "btn_publish";
-            this.btn_publish.Size = new System.Drawing.Size(92, 33);
+            this.btn_publish.Size = new System.Drawing.Size(92, 36);
             this.btn_publish.TabIndex = 10;
             this.btn_publish.Text = "PUBLISH";
             this.btn_publish.ThemeName = "Breeze";
-            // 
-            // cb_publish_level
-            // 
-            this.cb_publish_level.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.cb_publish_level.Font = new System.Drawing.Font("微软雅黑", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.cb_publish_level.FormattingEnabled = true;
-            this.cb_publish_level.ItemHeight = 25;
-            this.cb_publish_level.Location = new System.Drawing.Point(522, 170);
-            this.cb_publish_level.Name = "cb_publish_level";
-            this.cb_publish_level.Size = new System.Drawing.Size(151, 33);
-            this.cb_publish_level.TabIndex = 9;
             // 
             // tb_publishTopic
             // 
             this.tb_publishTopic.Location = new System.Drawing.Point(12, 167);
             this.tb_publishTopic.Name = "tb_publishTopic";
-            this.tb_publishTopic.Size = new System.Drawing.Size(504, 36);
+            this.tb_publishTopic.Size = new System.Drawing.Size(483, 36);
             this.tb_publishTopic.TabIndex = 8;
             this.tb_publishTopic.Text = "topic";
             this.tb_publishTopic.ThemeName = "Material";
@@ -195,9 +178,9 @@
             // 
             // btn_openFile
             // 
-            this.btn_openFile.Location = new System.Drawing.Point(679, 260);
+            this.btn_openFile.Location = new System.Drawing.Point(679, 257);
             this.btn_openFile.Name = "btn_openFile";
-            this.btn_openFile.Size = new System.Drawing.Size(92, 33);
+            this.btn_openFile.Size = new System.Drawing.Size(92, 36);
             this.btn_openFile.TabIndex = 15;
             this.btn_openFile.Text = "OpenFile";
             this.btn_openFile.ThemeName = "Breeze";
@@ -211,35 +194,86 @@
             this.radLabel6.Text = "Subscribes";
             this.radLabel6.ThemeName = "Material";
             // 
-            // radCollapsiblePanel1
+            // tb_receiveMsg
             // 
-            this.radCollapsiblePanel1.Location = new System.Drawing.Point(12, 498);
-            this.radCollapsiblePanel1.Name = "radCollapsiblePanel1";
-            // 
-            // radCollapsiblePanel1.PanelContainer
-            // 
-            this.radCollapsiblePanel1.PanelContainer.Controls.Add(this.radTextBox1);
-            this.radCollapsiblePanel1.PanelContainer.Location = new System.Drawing.Point(0, 0);
-            this.radCollapsiblePanel1.PanelContainer.Size = new System.Drawing.Size(759, 87);
-            this.radCollapsiblePanel1.Size = new System.Drawing.Size(759, 110);
-            this.radCollapsiblePanel1.TabIndex = 1;
-            this.radCollapsiblePanel1.ThemeName = "Material";
-            // 
-            // radTextBox1
-            // 
-            this.radTextBox1.AutoScroll = true;
-            this.radTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.radTextBox1.Location = new System.Drawing.Point(0, 0);
-            this.radTextBox1.Multiline = true;
-            this.radTextBox1.Name = "radTextBox1";
+            this.tb_receiveMsg.AutoScroll = true;
+            this.tb_receiveMsg.Location = new System.Drawing.Point(12, 546);
+            this.tb_receiveMsg.Multiline = true;
+            this.tb_receiveMsg.Name = "tb_receiveMsg";
             // 
             // 
             // 
-            this.radTextBox1.RootElement.StretchVertically = true;
-            this.radTextBox1.Size = new System.Drawing.Size(759, 87);
-            this.radTextBox1.TabIndex = 12;
-            this.radTextBox1.Text = "message";
-            this.radTextBox1.ThemeName = "Material";
+            this.tb_receiveMsg.RootElement.StretchVertically = true;
+            this.tb_receiveMsg.Size = new System.Drawing.Size(759, 90);
+            this.tb_receiveMsg.TabIndex = 17;
+            this.tb_receiveMsg.Text = "message";
+            this.tb_receiveMsg.ThemeName = "Material";
+            // 
+            // cb_subscribe_level
+            // 
+            // 
+            // cb_subscribe_level.NestedRadGridView
+            // 
+            this.cb_subscribe_level.EditorControl.BackColor = System.Drawing.SystemColors.Window;
+            this.cb_subscribe_level.EditorControl.Cursor = System.Windows.Forms.Cursors.Default;
+            this.cb_subscribe_level.EditorControl.Font = new System.Drawing.Font("宋体", 9F);
+            this.cb_subscribe_level.EditorControl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.cb_subscribe_level.EditorControl.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.cb_subscribe_level.EditorControl.Location = new System.Drawing.Point(0, 0);
+            // 
+            // 
+            // 
+            this.cb_subscribe_level.EditorControl.MasterTemplate.AllowAddNewRow = false;
+            this.cb_subscribe_level.EditorControl.MasterTemplate.AllowCellContextMenu = false;
+            this.cb_subscribe_level.EditorControl.MasterTemplate.AllowColumnChooser = false;
+            this.cb_subscribe_level.EditorControl.MasterTemplate.EnableGrouping = false;
+            this.cb_subscribe_level.EditorControl.MasterTemplate.ShowFilteringRow = false;
+            this.cb_subscribe_level.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition3;
+            this.cb_subscribe_level.EditorControl.Name = "NestedRadGridView";
+            this.cb_subscribe_level.EditorControl.ReadOnly = true;
+            this.cb_subscribe_level.EditorControl.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.cb_subscribe_level.EditorControl.ShowGroupPanel = false;
+            this.cb_subscribe_level.EditorControl.Size = new System.Drawing.Size(240, 150);
+            this.cb_subscribe_level.EditorControl.TabIndex = 0;
+            this.cb_subscribe_level.Location = new System.Drawing.Point(501, 80);
+            this.cb_subscribe_level.Name = "cb_subscribe_level";
+            this.cb_subscribe_level.Size = new System.Drawing.Size(172, 36);
+            this.cb_subscribe_level.TabIndex = 18;
+            this.cb_subscribe_level.TabStop = false;
+            this.cb_subscribe_level.ThemeName = "Material";
+            // 
+            // cb_publish_level
+            // 
+            // 
+            // cb_publish_level.NestedRadGridView
+            // 
+            this.cb_publish_level.EditorControl.BackColor = System.Drawing.SystemColors.Window;
+            this.cb_publish_level.EditorControl.Cursor = System.Windows.Forms.Cursors.Default;
+            this.cb_publish_level.EditorControl.Font = new System.Drawing.Font("宋体", 9F);
+            this.cb_publish_level.EditorControl.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.cb_publish_level.EditorControl.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.cb_publish_level.EditorControl.Location = new System.Drawing.Point(0, 0);
+            // 
+            // 
+            // 
+            this.cb_publish_level.EditorControl.MasterTemplate.AllowAddNewRow = false;
+            this.cb_publish_level.EditorControl.MasterTemplate.AllowCellContextMenu = false;
+            this.cb_publish_level.EditorControl.MasterTemplate.AllowColumnChooser = false;
+            this.cb_publish_level.EditorControl.MasterTemplate.EnableGrouping = false;
+            this.cb_publish_level.EditorControl.MasterTemplate.ShowFilteringRow = false;
+            this.cb_publish_level.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition4;
+            this.cb_publish_level.EditorControl.Name = "NestedRadGridView";
+            this.cb_publish_level.EditorControl.ReadOnly = true;
+            this.cb_publish_level.EditorControl.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.cb_publish_level.EditorControl.ShowGroupPanel = false;
+            this.cb_publish_level.EditorControl.Size = new System.Drawing.Size(240, 150);
+            this.cb_publish_level.EditorControl.TabIndex = 0;
+            this.cb_publish_level.Location = new System.Drawing.Point(501, 167);
+            this.cb_publish_level.Name = "cb_publish_level";
+            this.cb_publish_level.Size = new System.Drawing.Size(172, 36);
+            this.cb_publish_level.TabIndex = 19;
+            this.cb_publish_level.TabStop = false;
+            this.cb_publish_level.ThemeName = "Material";
             // 
             // Broker
             // 
@@ -247,18 +281,18 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
             this.ClientSize = new System.Drawing.Size(781, 648);
-            this.Controls.Add(this.radCollapsiblePanel1);
+            this.Controls.Add(this.cb_publish_level);
+            this.Controls.Add(this.cb_subscribe_level);
+            this.Controls.Add(this.tb_receiveMsg);
             this.Controls.Add(this.radLabel6);
             this.Controls.Add(this.btn_openFile);
             this.Controls.Add(this.tb_publishPath);
             this.Controls.Add(this.radLabel5);
             this.Controls.Add(this.tb_publishMessage);
             this.Controls.Add(this.btn_publish);
-            this.Controls.Add(this.cb_publish_level);
             this.Controls.Add(this.tb_publishTopic);
             this.Controls.Add(this.radLabel4);
             this.Controls.Add(this.btn_subscribe);
-            this.Controls.Add(this.cb_subscribe_level);
             this.Controls.Add(this.tb_subscribe);
             this.Controls.Add(this.radLabel3);
             this.Controls.Add(this.radLabel2);
@@ -283,10 +317,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.radLabel5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_openFile)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel6)).EndInit();
-            this.radCollapsiblePanel1.PanelContainer.ResumeLayout(false);
-            this.radCollapsiblePanel1.PanelContainer.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.radCollapsiblePanel1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radTextBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tb_receiveMsg)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cb_subscribe_level.EditorControl.MasterTemplate)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cb_subscribe_level.EditorControl)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cb_subscribe_level)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cb_publish_level.EditorControl.MasterTemplate)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cb_publish_level.EditorControl)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cb_publish_level)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -299,11 +336,9 @@
         private Telerik.WinControls.UI.RadLabel radLabel3;
         private Telerik.WinControls.UI.RadLabel radLabel2;
         private Telerik.WinControls.UI.RadTextBox tb_subscribe;
-        private System.Windows.Forms.ComboBox cb_subscribe_level;
         private Telerik.WinControls.Themes.BreezeTheme breezeTheme1;
         private Telerik.WinControls.UI.RadButton btn_subscribe;
         private Telerik.WinControls.UI.RadButton btn_publish;
-        private System.Windows.Forms.ComboBox cb_publish_level;
         private Telerik.WinControls.UI.RadTextBox tb_publishTopic;
         private Telerik.WinControls.UI.RadLabel radLabel4;
         private Telerik.WinControls.UI.RadTextBox tb_publishMessage;
@@ -311,8 +346,9 @@
         private Telerik.WinControls.UI.RadLabel radLabel5;
         private Telerik.WinControls.UI.RadButton btn_openFile;
         private Telerik.WinControls.UI.RadLabel radLabel6;
-        private Telerik.WinControls.UI.RadCollapsiblePanel radCollapsiblePanel1;
         private Telerik.WinControls.Themes.MaterialTheme materialTheme1;
-        private Telerik.WinControls.UI.RadTextBox radTextBox1;
+        private Telerik.WinControls.UI.RadTextBox tb_receiveMsg;
+        private Telerik.WinControls.UI.RadMultiColumnComboBox cb_subscribe_level;
+        private Telerik.WinControls.UI.RadMultiColumnComboBox cb_publish_level;
     }
 }

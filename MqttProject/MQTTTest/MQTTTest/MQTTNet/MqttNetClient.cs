@@ -141,9 +141,12 @@ namespace MQTTTest.MQTTNet
         #endregion
 
         private MqttNetClient mqttNetClient;
-
+        public delegate void MyDeleteMsg(string str);
+        private event MyDeleteMsg deleteSendMsg;
         public MqttNetClient()
         {
+            Broker broker = new Broker(mqttNetClient);
+            deleteSendMsg += broker.Receive;
         }
 
         /// <summary>
@@ -403,6 +406,7 @@ namespace MQTTTest.MQTTNet
                 string Retained = e.ApplicationMessage.Retain.ToString();
                 LogHelper.Log.Info("MessageReceived >>Topic:" + Topic + "; QoS: " + QoS + "; Retained: " + Retained + ";");
                 LogHelper.Log.Info("MessageReceived >>Msg: " + text);
+                deleteSendMsg.Invoke(text);
             }
             catch (Exception exp)
             {

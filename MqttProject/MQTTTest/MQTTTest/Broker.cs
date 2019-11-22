@@ -8,6 +8,8 @@ using System.Windows.Forms;
 using Telerik.WinControls;
 using MQTTTest.MQTTNet;
 using MQTTnet.Protocol;
+using Telerik.WinControls.UI;
+using CommonUtils.Logger;
 
 namespace MQTTTest
 {
@@ -15,9 +17,12 @@ namespace MQTTTest
     {
         private MqttNetClient mqttNetClient;
 
+        private event EventHandler receiveMsgEvent;
+
         public Broker(MqttNetClient mqttNetClient)
         {
             InitializeComponent();
+            
             this.mqttNetClient = mqttNetClient;
             this.MaximizeBox = false;
             this.StartPosition = FormStartPosition.CenterParent;
@@ -47,7 +52,6 @@ namespace MQTTTest
             mqttNetClient.Topic = new List<string>();
             mqttNetClient.Topic.Add(subscribe);
             mqttNetClient.MqttQualityLevel = levelEnum;
-            mqttNetClient.SubscribeMessage();
         }
 
         private void Broker_Load(object sender, EventArgs e)
@@ -58,15 +62,35 @@ namespace MQTTTest
         private void Init()
         {
             ////AtMostOnce/AtLeastOnce/ExactlyOnce
-            this.cb_subscribe_level.Items.Add("0-AtMostOnce");
-            this.cb_subscribe_level.Items.Add("1-AtLeastOnce");
-            this.cb_subscribe_level.Items.Add("2-ExactlyOnce");
+            this.cb_subscribe_level.MultiColumnComboBoxElement.Columns.Add("data");
+            this.cb_subscribe_level.EditorControl.Rows.Add("0-AtMostOnce");
+            this.cb_subscribe_level.EditorControl.Rows.Add("1-AtLeastOnce");
+            this.cb_subscribe_level.EditorControl.Rows.Add("2-ExactlyOnce");
             this.cb_subscribe_level.SelectedIndex = 0;
+            this.cb_subscribe_level.EditorControl.ShowColumnHeaders = false;
+            this.cb_subscribe_level.BestFitColumns();
 
-            this.cb_publish_level.Items.Add("0-AtMostOnce");
-            this.cb_publish_level.Items.Add("1-AtLeastOnce");
-            this.cb_publish_level.Items.Add("2-ExactlyOnce");
+            this.cb_publish_level.MultiColumnComboBoxElement.Columns.Add("data");
+            this.cb_publish_level.EditorControl.Rows.Add("0-AtMostOnce");
+            this.cb_publish_level.EditorControl.Rows.Add("1-AtLeastOnce");
+            this.cb_publish_level.EditorControl.Rows.Add("2-ExactlyOnce");
             this.cb_publish_level.SelectedIndex = 0;
+            this.cb_publish_level.EditorControl.ShowColumnHeaders = false;
+            this.cb_publish_level.BestFitColumns();
+        }
+
+        public void Receive(string str)
+        {
+            if (tb_receiveMsg.InvokeRequired)
+            {
+                MqttNetClient.MyDeleteMsg myDeleteMsg = Receive;
+                this.tb_receiveMsg.Invoke(myDeleteMsg,str);
+            }
+            else
+            {
+                MqttNetClient.MyDeleteMsg myDeleteMsg = Receive;
+                this.tb_receiveMsg.Invoke(myDeleteMsg, str);
+            }
         }
     }
 }
