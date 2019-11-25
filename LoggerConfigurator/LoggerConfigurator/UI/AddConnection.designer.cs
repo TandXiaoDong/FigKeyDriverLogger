@@ -1,4 +1,4 @@
-﻿namespace MQTTTest.UI
+﻿namespace LoggerConfigurator.UI
 {
     partial class AddConnection
     {

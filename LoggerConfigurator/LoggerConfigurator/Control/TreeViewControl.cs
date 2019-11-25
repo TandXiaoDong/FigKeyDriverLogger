@@ -92,6 +92,8 @@ namespace FigKeyLoggerConfigurator.Control
             cardReader.Nodes.Add(TreeViewData.FileManager1.CLASSIC_VIEW);
             cardReader.Nodes.Add(TreeViewData.FileManager1.NAVIGATOR_VIEW);
             #endregion
+
+            this.radTreeView.ExpandAll();
         }
     }
 }

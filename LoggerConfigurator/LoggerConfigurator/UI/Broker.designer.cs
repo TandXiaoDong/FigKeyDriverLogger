@@ -1,4 +1,4 @@
-﻿namespace MQTTTest.UI
+﻿namespace LoggerConfigurator.UI
 {
     partial class Broker
     {
@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition10 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition11 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition12 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition2 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition3 = new Telerik.WinControls.UI.TableViewDefinition();
             this.radLabel1 = new Telerik.WinControls.UI.RadLabel();
             this.radLabel3 = new Telerik.WinControls.UI.RadLabel();
             this.radLabel2 = new Telerik.WinControls.UI.RadLabel();
@@ -47,7 +47,6 @@
             this.cb_subscribe_level = new Telerik.WinControls.UI.RadMultiColumnComboBox();
             this.cb_publish_level = new Telerik.WinControls.UI.RadMultiColumnComboBox();
             this.tb_publishTopic = new Telerik.WinControls.UI.RadMultiColumnComboBox();
-            this.tb_receive = new Telerik.WinControls.UI.RadTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel2)).BeginInit();
@@ -68,7 +67,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.tb_publishTopic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tb_publishTopic.EditorControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tb_publishTopic.EditorControl.MasterTemplate)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tb_receive)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
@@ -197,7 +195,7 @@
             this.cb_subscribe_level.EditorControl.MasterTemplate.AllowColumnChooser = false;
             this.cb_subscribe_level.EditorControl.MasterTemplate.EnableGrouping = false;
             this.cb_subscribe_level.EditorControl.MasterTemplate.ShowFilteringRow = false;
-            this.cb_subscribe_level.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition10;
+            this.cb_subscribe_level.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition1;
             this.cb_subscribe_level.EditorControl.Name = "NestedRadGridView";
             this.cb_subscribe_level.EditorControl.ReadOnly = true;
             this.cb_subscribe_level.EditorControl.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -230,7 +228,7 @@
             this.cb_publish_level.EditorControl.MasterTemplate.AllowColumnChooser = false;
             this.cb_publish_level.EditorControl.MasterTemplate.EnableGrouping = false;
             this.cb_publish_level.EditorControl.MasterTemplate.ShowFilteringRow = false;
-            this.cb_publish_level.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition11;
+            this.cb_publish_level.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition2;
             this.cb_publish_level.EditorControl.Name = "NestedRadGridView";
             this.cb_publish_level.EditorControl.ReadOnly = true;
             this.cb_publish_level.EditorControl.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -263,7 +261,7 @@
             this.tb_publishTopic.EditorControl.MasterTemplate.AllowColumnChooser = false;
             this.tb_publishTopic.EditorControl.MasterTemplate.EnableGrouping = false;
             this.tb_publishTopic.EditorControl.MasterTemplate.ShowFilteringRow = false;
-            this.tb_publishTopic.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition12;
+            this.tb_publishTopic.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition3;
             this.tb_publishTopic.EditorControl.Name = "NestedRadGridView";
             this.tb_publishTopic.EditorControl.ReadOnly = true;
             this.tb_publishTopic.EditorControl.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -277,29 +275,12 @@
             this.tb_publishTopic.TabStop = false;
             this.tb_publishTopic.ThemeName = "Material";
             // 
-            // tb_receive
-            // 
-            this.tb_receive.AutoScroll = true;
-            this.tb_receive.Location = new System.Drawing.Point(12, 457);
-            this.tb_receive.Multiline = true;
-            this.tb_receive.Name = "tb_receive";
-            // 
-            // 
-            // 
-            this.tb_receive.RootElement.StretchVertically = true;
-            this.tb_receive.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tb_receive.Size = new System.Drawing.Size(759, 138);
-            this.tb_receive.TabIndex = 24;
-            this.tb_receive.Text = "receive message";
-            this.tb_receive.ThemeName = "Material";
-            // 
             // Broker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
-            this.ClientSize = new System.Drawing.Size(781, 598);
-            this.Controls.Add(this.tb_receive);
+            this.ClientSize = new System.Drawing.Size(781, 459);
             this.Controls.Add(this.tb_publishTopic);
             this.Controls.Add(this.cb_publish_level);
             this.Controls.Add(this.cb_subscribe_level);
@@ -341,7 +322,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.tb_publishTopic.EditorControl.MasterTemplate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tb_publishTopic.EditorControl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tb_publishTopic)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tb_receive)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -366,6 +346,5 @@
         private Telerik.WinControls.UI.RadMultiColumnComboBox cb_subscribe_level;
         private Telerik.WinControls.UI.RadMultiColumnComboBox cb_publish_level;
         private Telerik.WinControls.UI.RadMultiColumnComboBox tb_publishTopic;
-        private Telerik.WinControls.UI.RadTextBox tb_receive;
     }
 }

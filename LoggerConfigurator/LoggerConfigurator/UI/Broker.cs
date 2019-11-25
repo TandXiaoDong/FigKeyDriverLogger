@@ -6,18 +6,14 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Telerik.WinControls;
-using MQTTTest.MQTTNet;
+using LoggerConfigurator.MQTTNet;
 using MQTTnet.Protocol;
-using MQTTnet;
-using MQTTnet.Client;
-using MQTTnet.Client.Options;
-using MQTTnet.Client.Receiving;
 using Telerik.WinControls.UI;
 using CommonUtils.Logger;
 using CommonUtils.FileHelper;
 using System.IO;
 
-namespace MQTTTest.UI
+namespace LoggerConfigurator.UI
 {
     public partial class Broker : Telerik.WinControls.UI.RadForm
     {
@@ -43,8 +39,6 @@ namespace MQTTTest.UI
             this.btn_subscribe.Click += Btn_subscribe_Click;
             this.btn_publish.Click += Btn_publish_Click;
             this.btn_openFile.Click += Btn_openFile_Click;
-            if (mqttNetClient.MqttClientObj.ApplicationMessageReceivedHandler == null)
-                mqttNetClient.MqttClientObj.ApplicationMessageReceivedHandler = new MqttApplicationMessageReceivedHandlerDelegate(new Action<MqttApplicationMessageReceivedEventArgs>(MqttApplicationMessageReceived));
         }
 
         private void Btn_openFile_Click(object sender, EventArgs e)
@@ -151,38 +145,16 @@ namespace MQTTTest.UI
 
         public void Receive(string str)
         {
-            if (tb_receive.InvokeRequired)
-            {
-                MqttNetClient.MyDeleteMsg myDeleteMsg = Receive;
-                this.tb_receive.Invoke(myDeleteMsg, str);
-            }
-            else
-            {
-                MqttNetClient.MyDeleteMsg myDeleteMsg = Receive;
-                this.tb_receive.Invoke(myDeleteMsg, str);
-            }
-        }
-
-        /// <summary>
-        /// 接收消息触发事件
-        /// </summary>
-        /// <param name="e"></param>
-        private void MqttApplicationMessageReceived(MqttApplicationMessageReceivedEventArgs e)
-        {
-            try
-            {
-                string text = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
-                string Topic = e.ApplicationMessage.Topic;
-                string QoS = e.ApplicationMessage.QualityOfServiceLevel.ToString();
-                string Retained = e.ApplicationMessage.Retain.ToString();
-                LogHelper.Log.Info("MessageReceived >>Topic:" + Topic + "; QoS: " + QoS + "; Retained: " + Retained + ";");
-                LogHelper.Log.Info("MessageReceived >>Msg: " + text);
-                this.tb_receive.Text += text;
-            }
-            catch (Exception exp)
-            {
-                LogHelper.Log.Error(exp.Message);
-            }
+            //if (tb_receive.InvokeRequired)
+            //{
+            //    MqttNetClient.MyDeleteMsg myDeleteMsg = Receive;
+            //    this.tb_receive.Invoke(myDeleteMsg, str);
+            //}
+            //else
+            //{
+            //    MqttNetClient.MyDeleteMsg myDeleteMsg = Receive;
+            //    this.tb_receive.Invoke(myDeleteMsg, str);
+            //}
         }
     }
 }

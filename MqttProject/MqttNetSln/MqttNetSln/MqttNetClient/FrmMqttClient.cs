@@ -176,7 +176,7 @@ namespace MqttNetClient
                 options.Credentials = new MqttClientCredentials()
                 {
                     Username = "admin",
-                    Password = "admin"
+                    Password = "password"
                 };
 
                 options.CleanSession = true;

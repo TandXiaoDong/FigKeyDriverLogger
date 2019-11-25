@@ -6,9 +6,9 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using Telerik.WinControls;
-using MQTTTest.MQTTNet;
+using LoggerConfigurator.MQTTNet;
 
-namespace MQTTTest.UI
+namespace LoggerConfigurator.UI
 {
     public partial class AddConnection : Telerik.WinControls.UI.RadForm
     {
@@ -16,11 +16,12 @@ namespace MQTTTest.UI
         private System.Timers.Timer timer;
         private int waitConnectTime;
 
-        public AddConnection()
+        public AddConnection(MqttNetClient mqttNet)
         {
             InitializeComponent();
             this.StartPosition = FormStartPosition.CenterParent;
             this.MaximizeBox = false;
+            this.mqttNetClient = mqttNet;
             Init();
             EventHandlers();
         }
@@ -29,7 +30,7 @@ namespace MQTTTest.UI
         {
             timer = new System.Timers.Timer();
             timer.Interval = 1000;
-            mqttNetClient = new MqttNetClient();
+
             this.tb_hostname.Text = "127.0.0.1";
             this.tb_port.Text = "61613";
             this.tb_password.PasswordChar = '*';

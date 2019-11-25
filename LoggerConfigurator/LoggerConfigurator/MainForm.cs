@@ -31,6 +31,7 @@ using LoggerConfigurator.View;
 using WindowsFormTelerik.GridViewExportData;
 using WindowsFormTelerik.CommonUI;
 using LoggerConfigurator.MQTTNet;
+using LoggerConfigurator.UI;
 
 namespace LoggerConfigurator
 {
@@ -112,7 +113,20 @@ namespace LoggerConfigurator
 
             this.menu_helper.Click += Menu_helper_Click;
             this.menu_abort.Click += Menu_abort_Click;
+            this.menu_connect.Click += Menu_connect_Click;
+            this.menu_disconnect.Click += Menu_disconnect_Click;
             this.FormClosed += MainForm_FormClosed;
+        }
+
+        private void Menu_disconnect_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void Menu_connect_Click(object sender, EventArgs e)
+        {
+            AddConnection addConnection = new AddConnection(mqttNetClient);
+            addConnection.ShowDialog();
         }
 
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
@@ -272,32 +286,38 @@ namespace LoggerConfigurator
             canDicCheckState_13 = new Dictionary<string, string>();//13cell row-state
             //配置
             //can1
-            cb_baud_can1.Items.Clear();
-            cb_baud_can1.Items.Add("100000");
-            cb_baud_can1.Items.Add("500000");
-            cb_baud_can1.Items.Add("1000000");
+            cb_baud_can1.MultiColumnComboBoxElement.Columns.Add("column1");
+            cb_baud_can1.EditorControl.Rows.Add(100000);
+            cb_baud_can1.EditorControl.Rows.Add(500000);
+            cb_baud_can1.EditorControl.Rows.Add(1000000);
             cb_baud_can1.SelectedIndex = 1;
+            cb_baud_can1.EditorControl.ShowColumnHeaders = false;
+            cb_baud_can1.AutoSizeDropDownToBestFit = true;
 
-            cb_protocol_can1.Items.Clear();
-            cb_protocol_can1.Items.Add(AgreementType.CCP);
-            cb_protocol_can1.Items.Add(AgreementType.XCP);
-            cb_protocol_can1.Items.Add(AgreementType.DBC);
-            cb_protocol_can1.Items.Add("");
+            cb_protocol_can1.MultiColumnComboBoxElement.Columns.Add("column1");
+            cb_protocol_can1.EditorControl.Rows.Add(AgreementType.CCP);
+            cb_protocol_can1.EditorControl.Rows.Add(AgreementType.XCP);
+            cb_protocol_can1.EditorControl.Rows.Add(AgreementType.DBC);
             cb_protocol_can1.SelectedIndex = 0;
+            cb_protocol_can1.EditorControl.ShowColumnHeaders = false;
+            cb_protocol_can1.AutoSizeDropDownToBestFit = true;
 
             //can2
-            cb_baud_can2.Items.Clear();
-            cb_baud_can2.Items.Add("100000");
-            cb_baud_can2.Items.Add("500000");
-            cb_baud_can2.Items.Add("1000000");
+            cb_baud_can2.MultiColumnComboBoxElement.Columns.Add("column1");
+            cb_baud_can2.EditorControl.Rows.Add(100000);
+            cb_baud_can2.EditorControl.Rows.Add(500000);
+            cb_baud_can2.EditorControl.Rows.Add(1000000);
             cb_baud_can2.SelectedIndex = 1;
+            cb_baud_can2.EditorControl.ShowColumnHeaders = false;
+            cb_baud_can2.AutoSizeDropDownToBestFit = true;
 
-            cb_protocol_can2.Items.Clear();
-            cb_protocol_can2.Items.Add(AgreementType.CCP);
-            cb_protocol_can2.Items.Add(AgreementType.XCP);
-            cb_protocol_can2.Items.Add(AgreementType.DBC);
-            cb_protocol_can2.Items.Add("");
+            cb_protocol_can2.MultiColumnComboBoxElement.Columns.Add("column1");
+            cb_protocol_can2.EditorControl.Rows.Add(AgreementType.CCP);
+            cb_protocol_can2.EditorControl.Rows.Add(AgreementType.XCP);
+            cb_protocol_can2.EditorControl.Rows.Add(AgreementType.DBC);
             cb_protocol_can2.SelectedIndex = 0;
+            cb_protocol_can2.EditorControl.ShowColumnHeaders = false;
+            cb_protocol_can2.AutoSizeDropDownToBestFit = true;
             //document set
             this.radDock1.RemoveAllDocumentWindows();
 
@@ -549,9 +569,9 @@ namespace LoggerConfigurator
         private void ExportData(CurrentCanType currentCanType)
         {
             SelectedRowCal();
-            string sourcePath = AppDomain.CurrentDomain.BaseDirectory + @"编译器\";
+            string sourcePath = AppDomain.CurrentDomain.BaseDirectory + "Config\\";
             if (!Directory.Exists(sourcePath))
-                sourcePath = AppDomain.CurrentDomain.BaseDirectory;
+                Directory.CreateDirectory(sourcePath);
             //string path = FileSelect.SaveAs("(*.c)|*.c",sourcePath);
             string path = sourcePath + "data.c";
             if (string.IsNullOrEmpty(path))
@@ -607,6 +627,14 @@ namespace LoggerConfigurator
             gridExportContent.AgreementTypeCan2 = agreementType2;
             gridExportContent.CurrentSelectCanType = currentCanType;
             ExportFile.ExportCanFile(path,sourcePath,gridExportContent);
+
+            //导出数据成功后，选择发布格式与发布文件
+            if (mqttNetClient == null)
+                return;
+            mqttNetClient.PushFilePath = path;
+            mqttNetClient.IsPublishMessage = true;
+            Broker broker = new Broker(mqttNetClient);
+            broker.ShowDialog();
         }
         #endregion
 
@@ -713,6 +741,7 @@ namespace LoggerConfigurator
                         return;
                     }
                     ExportData(CurrentCanType.CAN1);
+                    
                 }
                 else if (ExportSet.can2Check && !ExportSet.can1Check)
                 {

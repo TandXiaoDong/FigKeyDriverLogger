@@ -115,13 +115,13 @@
     <Compile Include="AddConnection.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AddConnection.Designer.cs">
+    <Compile Include="AddConnection.designer.cs">
       <DependentUpon>AddConnection.cs</DependentUpon>
     </Compile>
     <Compile Include="Broker.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Broker.Designer.cs">
+    <Compile Include="Broker.designer.cs">
       <DependentUpon>Broker.cs</DependentUpon>
     </Compile>
     <Compile Include="MainForm.cs">

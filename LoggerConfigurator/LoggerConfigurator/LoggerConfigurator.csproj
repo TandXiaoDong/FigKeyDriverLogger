@@ -296,6 +296,7 @@
     <Reference Include="Telerik.WinControls.RichTextEditor, Version=2019.1.219.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
     <Reference Include="Telerik.WinControls.Themes.Breeze, Version=2019.1.219.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
     <Reference Include="Telerik.WinControls.Themes.Crystal, Version=2019.1.219.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
+    <Reference Include="Telerik.WinControls.Themes.Material, Version=2019.1.219.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL" />
     <Reference Include="Telerik.WinControls.UI, Version=2019.1.219.40, Culture=neutral, PublicKeyToken=5bb2a467cbec794e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\CommonLibrary2019\CommonUtils\CommonUtils\Lib\telerik\Telerik.WinControls.UI.dll</HintPath>
@@ -374,6 +375,18 @@
     <Compile Include="TestServer.designer.cs">
       <DependentUpon>TestServer.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\AddConnection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\AddConnection.designer.cs">
+      <DependentUpon>AddConnection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Broker.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Broker.designer.cs">
+      <DependentUpon>Broker.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\AboutBox1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -450,6 +463,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="TestServer.resx">
       <DependentUpon>TestServer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\AddConnection.resx">
+      <DependentUpon>AddConnection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Broker.resx">
+      <DependentUpon>Broker.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\AboutBox1.resx">
       <DependentUpon>AboutBox1.cs</DependentUpon>
@@ -618,9 +637,7 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Connected Services\ServiceReference1\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UI\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.0\build\netstandard2.0\NETStandard.Library.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

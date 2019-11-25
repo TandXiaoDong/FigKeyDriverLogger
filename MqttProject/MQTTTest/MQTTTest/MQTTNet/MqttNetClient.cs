@@ -14,7 +14,6 @@ using MQTTnet.Client.Disconnecting;
 using MQTTnet.Client.Connecting;
 using CommonUtils.Logger;
 
-
 namespace MQTTTest.MQTTNet
 {
     public class MqttNetClient
@@ -62,8 +61,9 @@ namespace MQTTTest.MQTTNet
         /// <para>1 - 至少一次</para>
         /// <para>2 - 刚好一次</para>
         /// </summary>
-        private MqttQualityOfServiceLevel mqttQualityLevel =  MqttQualityOfServiceLevel.AtMostOnce;
+        private MqttQualityOfServiceLevel mqttQualityLevel = MqttQualityOfServiceLevel.AtMostOnce;
 
+        public MqttFactory mqttFactory;
 
         public MqttClient MqttClientObj { get; set; }
 
@@ -138,39 +138,52 @@ namespace MQTTTest.MQTTNet
         /// byte消息
         /// </summary>
         public byte[] PushMessageByte { get; set; }
+
+        public string PushFilePath { get; set; }
+
+        public bool IsPublishMessage { get; set; }
         #endregion
 
         private MqttNetClient mqttNetClient;
         public delegate void MyDeleteMsg(string str);
         private event MyDeleteMsg deleteSendMsg;
+
         public MqttNetClient()
         {
-            Broker broker = new Broker(mqttNetClient);
-            deleteSendMsg += broker.Receive;
+
         }
 
         /// <summary>
         /// 启动客户端，连接服务
         /// </summary>
-        public void StartConnection(MqttNetClient mqttNetClient)
+        public void StartConnection(MqttNetClient mqttNet)
         {
             LogHelper.Log.Info("Work >>Begin");
             try
             {
-                this.mqttNetClient = mqttNetClient;
-                var factory = new MqttFactory();
-                mqttNetClient.MqttClientObj = factory.CreateMqttClient() as MqttClient;
+                this.mqttNetClient = mqttNet;
+                if (mqttFactory == null)
+                    mqttFactory = new MqttFactory();
 
-                mqttNetClient.MqttClientOptions = new MqttClientOptionsBuilder()
-                    .WithTcpServer(mqttNetClient.ServerUrl, mqttNetClient.Port)
-                    .WithCredentials(mqttNetClient.UserID, mqttNetClient.PassWord)
-                    .WithClientId(Guid.NewGuid().ToString().Substring(0, 5))
-                    .Build();
-
+                if (mqttNetClient.MqttClientObj == null)
+                    mqttNetClient.MqttClientObj = mqttFactory.CreateMqttClient() as MqttClient;
+                if (mqttNetClient.MqttClientOptions == null)
+                {
+                    mqttNetClient.MqttClientOptions = new MqttClientOptionsBuilder()
+                   .WithTcpServer(mqttNetClient.ServerUrl, mqttNetClient.Port)
+                   .WithCredentials(mqttNetClient.UserID, mqttNetClient.PassWord)
+                   .WithClientId(Guid.NewGuid().ToString().Substring(0, 5))
+                   .Build();
+                }
                 mqttNetClient.MqttClientObj.ConnectAsync(mqttNetClient.MqttClientOptions);
-                mqttNetClient.MqttClientObj.ConnectedHandler = new MqttClientConnectedHandlerDelegate(new Func<MqttClientConnectedEventArgs, Task>(Connected));
-                mqttNetClient.MqttClientObj.DisconnectedHandler = new MqttClientDisconnectedHandlerDelegate(new Func<MqttClientDisconnectedEventArgs, Task>(Disconnected));
-                mqttNetClient.MqttClientObj.ApplicationMessageReceivedHandler = new MqttApplicationMessageReceivedHandlerDelegate(new Action<MqttApplicationMessageReceivedEventArgs>(MqttApplicationMessageReceived));
+
+                if (mqttNetClient.MqttClientObj.ConnectedHandler == null)
+                    mqttNetClient.MqttClientObj.ConnectedHandler = new MqttClientConnectedHandlerDelegate(new Func<MqttClientConnectedEventArgs, Task>(Connected));
+
+                if (mqttNetClient.MqttClientObj.DisconnectedHandler == null)
+                    mqttNetClient.MqttClientObj.DisconnectedHandler = new MqttClientDisconnectedHandlerDelegate(new Func<MqttClientDisconnectedEventArgs, Task>(Disconnected));
+                //if (mqttNetClient.MqttClientObj.ApplicationMessageReceivedHandler == null)
+                //    mqttNetClient.MqttClientObj.ApplicationMessageReceivedHandler = new MqttApplicationMessageReceivedHandlerDelegate(new Action<MqttApplicationMessageReceivedEventArgs>(MqttApplicationMessageReceived));
             }
             catch (Exception exp)
             {
@@ -193,7 +206,8 @@ namespace MQTTTest.MQTTNet
         {
             try
             {
-                if (mqttNetClient.MqttClientObj == null) return;
+                if (mqttNetClient.MqttClientObj == null)
+                    return;
                 if (mqttNetClient.MqttClientObj.IsConnected == false)
                     await mqttNetClient.MqttClientObj.ConnectAsync(mqttNetClient.MqttClientOptions);
 
@@ -268,7 +282,7 @@ namespace MQTTTest.MQTTNet
                         .Build();
                     await mqttNetClient.MqttClientObj.PublishAsync(mamb);
                 }
-                else if (MqttQualityLevel ==  MqttQualityOfServiceLevel.AtLeastOnce)
+                else if (MqttQualityLevel == MqttQualityOfServiceLevel.AtLeastOnce)
                 {
                     var mamb = new MqttApplicationMessageBuilder()
                         .WithTopic(Topic)
@@ -294,55 +308,60 @@ namespace MQTTTest.MQTTNet
                 LogHelper.Log.Error("Publish >>" + exp.Message);
             }
         }
-        
+
         /// <summary>
         /// 订阅主题
         /// </summary>
         /// <param name="topic"></param>
-        async public void SubscribeMessage()
+        public bool SubscribeMessage()
         {
             try
             {
                 if (mqttNetClient.MqttClientObj == null)
-                    return;
+                    return false;
                 if (mqttNetClient.MqttClientObj.IsConnected == false)
-                    await mqttNetClient.MqttClientObj.ConnectAsync(mqttNetClient.MqttClientOptions);
+                    mqttNetClient.MqttClientObj.ConnectAsync(mqttNetClient.MqttClientOptions);
 
                 if (mqttNetClient.MqttClientObj.IsConnected == false)
                 {
                     LogHelper.Log.Info("Publish >>Connected Failed! ");
-                    return;
+                    return false;
                 }
                 List<TopicFilter> listTopic = new List<TopicFilter>();
                 if (mqttNetClient.Topic.Count() > 0)
                 {
                     foreach (var topic in mqttNetClient.Topic)
                     {
-                        if (MqttQualityLevel ==  MqttQualityOfServiceLevel.AtMostOnce)
+                        if (MqttQualityLevel == MqttQualityOfServiceLevel.AtMostOnce)
                         {
                             var topicFilterBuilder = new TopicFilterBuilder().WithTopic(topic)
                                 .WithAtMostOnceQoS().Build();
                             listTopic.Add(topicFilterBuilder);
                         }
-                        else if (MqttQualityLevel ==  MqttQualityOfServiceLevel.AtLeastOnce)
+                        else if (MqttQualityLevel == MqttQualityOfServiceLevel.AtLeastOnce)
                         {
                             var topicFilterBuilder = new TopicFilterBuilder().WithTopic(topic)
                                 .WithAtLeastOnceQoS().Build();
                             listTopic.Add(topicFilterBuilder);
                         }
-                        else if (MqttQualityLevel ==  MqttQualityOfServiceLevel.ExactlyOnce)
+                        else if (MqttQualityLevel == MqttQualityOfServiceLevel.ExactlyOnce)
                         {
                             var topicFilterBuilder = new TopicFilterBuilder().WithTopic(topic)
                                 .WithExactlyOnceQoS().Build();
                             listTopic.Add(topicFilterBuilder);
                         }
                     }
+                    if (listTopic.Count < 1)
+                        return false;
+                    mqttNetClient.MqttClientObj.SubscribeAsync(listTopic.ToArray());
+                    return true;
                 }
-                await mqttNetClient.MqttClientObj.SubscribeAsync(listTopic.ToArray());
+                return false;
             }
             catch (Exception exp)
             {
                 LogHelper.Log.Error("Subscrible >>" + exp.Message);
+                return false;
             }
         }
 
@@ -432,6 +451,6 @@ namespace MQTTTest.MQTTNet
          * 2）设备：
          *  接受消息：
          *  发送消息：
-         */ 
+         */
     }
 }
