@@ -22,6 +22,8 @@ namespace MQTTTest.UI
     public partial class Broker : Telerik.WinControls.UI.RadForm
     {
         private MqttNetClient mqttNetClient;
+        private delegate void DelegateMessage(string str);
+        private DelegateMessage mydelMessage;
         private const string PUBLISH_TOPIC_CONFIG_DEFAULT = "topic/logger/config/defaultCFile";
         private const string PUBLISH_TOPIC_CONFIG_JSON = "topic/logger/config/jsonFile";
         private const string PUBLISH_TOPIC_CONFIG_INI = "topic/logger/config/iniFile";
@@ -39,12 +41,22 @@ namespace MQTTTest.UI
 
         private void EventHandlers()
         {
+            mydelMessage = new DelegateMessage(RefreshMessageControl);
             this.Load += Broker_Load;
             this.btn_subscribe.Click += Btn_subscribe_Click;
             this.btn_publish.Click += Btn_publish_Click;
             this.btn_openFile.Click += Btn_openFile_Click;
-            if (mqttNetClient.MqttClientObj.ApplicationMessageReceivedHandler == null)
-                mqttNetClient.MqttClientObj.ApplicationMessageReceivedHandler = new MqttApplicationMessageReceivedHandlerDelegate(new Action<MqttApplicationMessageReceivedEventArgs>(MqttApplicationMessageReceived));
+            this.mqttNetClient.deleteSendMsgEvent += MqttNetClient_deleteSendMsgEvent;
+        }
+
+        private void MqttNetClient_deleteSendMsgEvent(string str)
+        {
+            this.tb_receiveMsg.BeginInvoke(mydelMessage,str);
+        }
+
+        private void RefreshMessageControl(string msg)
+        {
+            this.tb_receiveMsg.Text += DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + " " + msg + "\r\n";
         }
 
         private void Btn_openFile_Click(object sender, EventArgs e)
@@ -108,6 +120,7 @@ namespace MQTTTest.UI
             if (mqttNetClient.PushFilePath == "")
                 return;
             this.tb_publishPath.Text = mqttNetClient.PushFilePath;
+            this.lbx_connect.Text = mqttNetClient.ServerName;
         }
 
         private void AnalysisConfig()
@@ -151,16 +164,17 @@ namespace MQTTTest.UI
 
         public void Receive(string str)
         {
-            if (tb_receive.InvokeRequired)
+            if (this.tb_receiveMsg.InvokeRequired)
             {
                 MqttNetClient.MyDeleteMsg myDeleteMsg = Receive;
-                this.tb_receive.Invoke(myDeleteMsg, str);
+                this.tb_receiveMsg.Invoke(myDeleteMsg, str);
             }
             else
             {
                 MqttNetClient.MyDeleteMsg myDeleteMsg = Receive;
-                this.tb_receive.Invoke(myDeleteMsg, str);
+                this.tb_receiveMsg.Invoke(myDeleteMsg, str);
             }
+            this.tb_receiveMsg.Text = str;
         }
 
         /// <summary>
@@ -177,7 +191,7 @@ namespace MQTTTest.UI
                 string Retained = e.ApplicationMessage.Retain.ToString();
                 LogHelper.Log.Info("MessageReceived >>Topic:" + Topic + "; QoS: " + QoS + "; Retained: " + Retained + ";");
                 LogHelper.Log.Info("MessageReceived >>Msg: " + text);
-                this.tb_receive.Text += text;
+                this.tb_receiveMsg.Text = text;
             }
             catch (Exception exp)
             {

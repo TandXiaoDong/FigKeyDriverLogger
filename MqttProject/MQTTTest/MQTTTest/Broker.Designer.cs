@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition10 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition11 = new Telerik.WinControls.UI.TableViewDefinition();
-            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition12 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition1 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition2 = new Telerik.WinControls.UI.TableViewDefinition();
+            Telerik.WinControls.UI.TableViewDefinition tableViewDefinition3 = new Telerik.WinControls.UI.TableViewDefinition();
             this.radLabel1 = new Telerik.WinControls.UI.RadLabel();
-            this.radLabel3 = new Telerik.WinControls.UI.RadLabel();
+            this.lbx_connect = new Telerik.WinControls.UI.RadLabel();
             this.radLabel2 = new Telerik.WinControls.UI.RadLabel();
             this.tb_subscribe = new Telerik.WinControls.UI.RadTextBox();
             this.breezeTheme1 = new Telerik.WinControls.Themes.BreezeTheme();
@@ -47,9 +47,10 @@
             this.cb_subscribe_level = new Telerik.WinControls.UI.RadMultiColumnComboBox();
             this.cb_publish_level = new Telerik.WinControls.UI.RadMultiColumnComboBox();
             this.tb_publishTopic = new Telerik.WinControls.UI.RadMultiColumnComboBox();
-            this.tb_receive = new Telerik.WinControls.UI.RadTextBox();
+            this.tb_receiveMsg = new Telerik.WinControls.UI.RadTextBox();
+            this.radLabel6 = new Telerik.WinControls.UI.RadLabel();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lbx_connect)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tb_subscribe)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_subscribe)).BeginInit();
@@ -68,7 +69,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.tb_publishTopic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tb_publishTopic.EditorControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tb_publishTopic.EditorControl.MasterTemplate)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tb_receive)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tb_receiveMsg)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
@@ -81,14 +83,14 @@
             this.radLabel1.Text = "Connection：";
             this.radLabel1.ThemeName = "Material";
             // 
-            // radLabel3
+            // lbx_connect
             // 
-            this.radLabel3.Location = new System.Drawing.Point(115, 12);
-            this.radLabel3.Name = "radLabel3";
-            this.radLabel3.Size = new System.Drawing.Size(68, 21);
-            this.radLabel3.TabIndex = 2;
-            this.radLabel3.Text = "mybroker";
-            this.radLabel3.ThemeName = "Material";
+            this.lbx_connect.Location = new System.Drawing.Point(115, 12);
+            this.lbx_connect.Name = "lbx_connect";
+            this.lbx_connect.Size = new System.Drawing.Size(68, 21);
+            this.lbx_connect.TabIndex = 2;
+            this.lbx_connect.Text = "mybroker";
+            this.lbx_connect.ThemeName = "Material";
             // 
             // radLabel2
             // 
@@ -197,7 +199,7 @@
             this.cb_subscribe_level.EditorControl.MasterTemplate.AllowColumnChooser = false;
             this.cb_subscribe_level.EditorControl.MasterTemplate.EnableGrouping = false;
             this.cb_subscribe_level.EditorControl.MasterTemplate.ShowFilteringRow = false;
-            this.cb_subscribe_level.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition10;
+            this.cb_subscribe_level.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition1;
             this.cb_subscribe_level.EditorControl.Name = "NestedRadGridView";
             this.cb_subscribe_level.EditorControl.ReadOnly = true;
             this.cb_subscribe_level.EditorControl.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -230,7 +232,7 @@
             this.cb_publish_level.EditorControl.MasterTemplate.AllowColumnChooser = false;
             this.cb_publish_level.EditorControl.MasterTemplate.EnableGrouping = false;
             this.cb_publish_level.EditorControl.MasterTemplate.ShowFilteringRow = false;
-            this.cb_publish_level.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition11;
+            this.cb_publish_level.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition2;
             this.cb_publish_level.EditorControl.Name = "NestedRadGridView";
             this.cb_publish_level.EditorControl.ReadOnly = true;
             this.cb_publish_level.EditorControl.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -263,7 +265,7 @@
             this.tb_publishTopic.EditorControl.MasterTemplate.AllowColumnChooser = false;
             this.tb_publishTopic.EditorControl.MasterTemplate.EnableGrouping = false;
             this.tb_publishTopic.EditorControl.MasterTemplate.ShowFilteringRow = false;
-            this.tb_publishTopic.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition12;
+            this.tb_publishTopic.EditorControl.MasterTemplate.ViewDefinition = tableViewDefinition3;
             this.tb_publishTopic.EditorControl.Name = "NestedRadGridView";
             this.tb_publishTopic.EditorControl.ReadOnly = true;
             this.tb_publishTopic.EditorControl.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -277,29 +279,37 @@
             this.tb_publishTopic.TabStop = false;
             this.tb_publishTopic.ThemeName = "Material";
             // 
-            // tb_receive
+            // tb_receiveMsg
             // 
-            this.tb_receive.AutoScroll = true;
-            this.tb_receive.Location = new System.Drawing.Point(12, 457);
-            this.tb_receive.Multiline = true;
-            this.tb_receive.Name = "tb_receive";
-            // 
+            this.tb_receiveMsg.Location = new System.Drawing.Point(12, 493);
+            this.tb_receiveMsg.Multiline = true;
+            this.tb_receiveMsg.Name = "tb_receiveMsg";
             // 
             // 
-            this.tb_receive.RootElement.StretchVertically = true;
-            this.tb_receive.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tb_receive.Size = new System.Drawing.Size(759, 138);
-            this.tb_receive.TabIndex = 24;
-            this.tb_receive.Text = "receive message";
-            this.tb_receive.ThemeName = "Material";
+            // 
+            this.tb_receiveMsg.RootElement.StretchVertically = true;
+            this.tb_receiveMsg.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.tb_receiveMsg.Size = new System.Drawing.Size(757, 114);
+            this.tb_receiveMsg.TabIndex = 25;
+            this.tb_receiveMsg.ThemeName = "Material";
+            // 
+            // radLabel6
+            // 
+            this.radLabel6.Location = new System.Drawing.Point(12, 471);
+            this.radLabel6.Name = "radLabel6";
+            this.radLabel6.Size = new System.Drawing.Size(120, 21);
+            this.radLabel6.TabIndex = 26;
+            this.radLabel6.Text = "Receive Message";
+            this.radLabel6.ThemeName = "Material";
             // 
             // Broker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
-            this.ClientSize = new System.Drawing.Size(781, 598);
-            this.Controls.Add(this.tb_receive);
+            this.ClientSize = new System.Drawing.Size(781, 619);
+            this.Controls.Add(this.radLabel6);
+            this.Controls.Add(this.tb_receiveMsg);
             this.Controls.Add(this.tb_publishTopic);
             this.Controls.Add(this.cb_publish_level);
             this.Controls.Add(this.cb_subscribe_level);
@@ -311,7 +321,7 @@
             this.Controls.Add(this.radLabel4);
             this.Controls.Add(this.btn_subscribe);
             this.Controls.Add(this.tb_subscribe);
-            this.Controls.Add(this.radLabel3);
+            this.Controls.Add(this.lbx_connect);
             this.Controls.Add(this.radLabel2);
             this.Controls.Add(this.radLabel1);
             this.Name = "Broker";
@@ -322,7 +332,7 @@
             this.Text = "Broker";
             this.ThemeName = "Material";
             ((System.ComponentModel.ISupportInitialize)(this.radLabel1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lbx_connect)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tb_subscribe)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_subscribe)).EndInit();
@@ -341,7 +351,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.tb_publishTopic.EditorControl.MasterTemplate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tb_publishTopic.EditorControl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tb_publishTopic)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.tb_receive)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tb_receiveMsg)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.radLabel6)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -351,7 +362,7 @@
         #endregion
 
         private Telerik.WinControls.UI.RadLabel radLabel1;
-        private Telerik.WinControls.UI.RadLabel radLabel3;
+        private Telerik.WinControls.UI.RadLabel lbx_connect;
         private Telerik.WinControls.UI.RadLabel radLabel2;
         private Telerik.WinControls.UI.RadTextBox tb_subscribe;
         private Telerik.WinControls.Themes.BreezeTheme breezeTheme1;
@@ -366,6 +377,7 @@
         private Telerik.WinControls.UI.RadMultiColumnComboBox cb_subscribe_level;
         private Telerik.WinControls.UI.RadMultiColumnComboBox cb_publish_level;
         private Telerik.WinControls.UI.RadMultiColumnComboBox tb_publishTopic;
-        private Telerik.WinControls.UI.RadTextBox tb_receive;
+        private Telerik.WinControls.UI.RadTextBox tb_receiveMsg;
+        private Telerik.WinControls.UI.RadLabel radLabel6;
     }
 }

@@ -252,27 +252,25 @@ namespace FigKeyLoggerConfigurator.Control
                 MessageBox.Show("没有可导出的数据！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-
             //导出完成后执行.bat
-            var batName = ConfigurationManager.AppSettings["batName"].ToString();
-            if (batName == "")
-                batName = "xcpmake.bat";
-            if (!File.Exists(excutePath + batName))
-                return;
-            return;
-            var executeResult = true;//= Execute.ExecuteApply(excutepath, batName);
-            if (executeResult)
-            {
-                if (MessageBox.Show("已成功生成DLL，是否打开DLL路径！", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
-                {
-                    System.Diagnostics.Process.Start(excutePath);//仅打开文件目录
-                    //System.Diagnostics.Process.Start("Explorer", "/select," + excutepath + "\\" + batName);//打开目录，定位文件
-                }
-            }
-            else
-            {
-                MessageBox.Show("生成DLL失败！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+            //var batName = ConfigurationManager.AppSettings["batName"].ToString();
+            //if (batName == "")
+            //    batName = "xcpmake.bat";
+            //if (!File.Exists(excutePath + batName))
+            //    return ;
+            //var executeResult = true;//=  Execute.ExecuteApply(excutepath, batName);
+            //if (executeResult)
+            //{
+            //    if (MessageBox.Show("已成功生成DLL，是否打开DLL路径！", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) == DialogResult.OK)
+            //    {
+            //        System.Diagnostics.Process.Start(excutePath);//仅打开文件目录
+            //        //System.Diagnostics.Process.Start("Explorer", "/select," + excutepath + "\\" + batName);//打开目录，定位文件
+            //    }
+            //}
+            //else
+            //{
+            //    MessageBox.Show("生成DLL失败！", "提示", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //}
         }
 
         private static void ExportDBC(string targetPath,RadGridView gridView, GridViewData gridData,

@@ -146,11 +146,16 @@ namespace MQTTTest.MQTTNet
 
         private MqttNetClient mqttNetClient;
         public delegate void MyDeleteMsg(string str);
-        private event MyDeleteMsg deleteSendMsg;
+        public event MyDeleteMsg deleteSendMsgEvent;
 
         public MqttNetClient()
         {
 
+        }
+
+        private void SendMessage(string sendMsg)
+        {
+            deleteSendMsgEvent(sendMsg);
         }
 
         /// <summary>
@@ -182,8 +187,8 @@ namespace MQTTTest.MQTTNet
 
                 if (mqttNetClient.MqttClientObj.DisconnectedHandler == null)
                     mqttNetClient.MqttClientObj.DisconnectedHandler = new MqttClientDisconnectedHandlerDelegate(new Func<MqttClientDisconnectedEventArgs, Task>(Disconnected));
-                //if (mqttNetClient.MqttClientObj.ApplicationMessageReceivedHandler == null)
-                //    mqttNetClient.MqttClientObj.ApplicationMessageReceivedHandler = new MqttApplicationMessageReceivedHandlerDelegate(new Action<MqttApplicationMessageReceivedEventArgs>(MqttApplicationMessageReceived));
+                if (mqttNetClient.MqttClientObj.ApplicationMessageReceivedHandler == null)
+                    mqttNetClient.MqttClientObj.ApplicationMessageReceivedHandler = new MqttApplicationMessageReceivedHandlerDelegate(new Action<MqttApplicationMessageReceivedEventArgs>(MqttApplicationMessageReceived));
             }
             catch (Exception exp)
             {
@@ -425,7 +430,7 @@ namespace MQTTTest.MQTTNet
                 string Retained = e.ApplicationMessage.Retain.ToString();
                 LogHelper.Log.Info("MessageReceived >>Topic:" + Topic + "; QoS: " + QoS + "; Retained: " + Retained + ";");
                 LogHelper.Log.Info("MessageReceived >>Msg: " + text);
-                deleteSendMsg.Invoke(text);
+                SendMessage(text);
             }
             catch (Exception exp)
             {

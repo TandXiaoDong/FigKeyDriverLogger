@@ -44,6 +44,35 @@ namespace LoggerConfigurator.UI
             this.btn_disConnect.Click += Btn_disConnect_Click;
             this.btn_cancel.Click += Btn_cancel_Click;
             this.timer.Elapsed += Timer_Elapsed;
+            this.mqttNetClient.deleteSendMsgEvent += MqttNetClient_deleteSendMsgEvent;
+            this.FormClosed += AddConnection_FormClosed;
+        }
+
+        private void AddConnection_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            mqttNetClient.IsPublishMessage = false;
+        }
+
+        private void MqttNetClient_deleteSendMsgEvent(string str)
+        {
+            if (mqttNetClient.IsConnectionSuccess)
+            {
+                if (mqttNetClient.IsPublishMessage)
+                {
+                    Broker broker = new Broker(mqttNetClient);
+                    broker.ShowDialog();
+                    return;
+                }
+                if (MessageBox.Show("是否进入订阅主题页面？", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) != DialogResult.OK)
+                {
+                    this.Close();
+                }
+                else
+                {
+                    Broker broker = new Broker(mqttNetClient);
+                    broker.ShowDialog();
+                }
+            }
         }
 
         private void Btn_cancel_Click(object sender, EventArgs e)
@@ -100,38 +129,9 @@ namespace LoggerConfigurator.UI
             mqttNetClient.Port = port;
             mqttNetClient.UserID = this.tb_username.Text;
             mqttNetClient.PassWord = this.tb_password.Text;
-            mqttNetClient.StartConnection(mqttNetClient);
+            mqttNetClient.ServerName = this.tb_connectName.Text;
 
-            while(true)
-            {
-                if (mqttNetClient.IsConnectionSuccess)
-                {
-                    if (MessageBox.Show("是否进入订阅主题页面？", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information, MessageBoxDefaultButton.Button2) != DialogResult.OK)
-                    {
-                        this.Close();
-                    }
-                    else
-                    {
-                        Broker broker = new Broker(mqttNetClient);
-                        broker.ShowDialog();
-                    }
-                    timer.Enabled = false;
-                    waitConnectTime = 0;
-                    timer.Stop();
-                    break;
-                }
-                else
-                {
-                    timer.Start();
-                    if (waitConnectTime == 5)
-                    {
-                        timer.Enabled = false;
-                        waitConnectTime = 0;
-                        timer.Stop();
-                        break;
-                    }
-                }
-            }
+            mqttNetClient.StartConnection(mqttNetClient);
         }
 
         private void AddConnection_Load(object sender, EventArgs e)

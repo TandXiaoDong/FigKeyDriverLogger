@@ -50,6 +50,8 @@ namespace LoggerConfigurator.UI
         {
             var publishTopic = this.tb_publishTopic.Text.Trim();
             var publishMessage = this.tb_publishMessage.Text.Trim();
+            if (!IsConnected())
+                return;
             mqttNetClient.Publish(publishTopic,publishMessage);
         }
 
@@ -62,8 +64,22 @@ namespace LoggerConfigurator.UI
             mqttNetClient.Topic = new List<string>();
             mqttNetClient.Topic.Add(subscribe);
             mqttNetClient.MqttQualityLevel = levelEnum;
-            if(!mqttNetClient.SubscribeMessage())
+            if(!IsConnected())
                 return;
+            if (!mqttNetClient.SubscribeMessage())
+                return;
+        }
+
+        private bool IsConnected()
+        {
+            if (!mqttNetClient.IsConnectionSuccess)
+            {
+                this.lbx_mqttStatus.Text = "未连接MQTT服务器";
+                this.lbx_mqttStatus.ForeColor = Color.Red;
+                return false;
+            }
+            this.lbx_mqttStatus.Text = "";
+            return true;
         }
 
         private void Broker_Load(object sender, EventArgs e)
@@ -102,6 +118,8 @@ namespace LoggerConfigurator.UI
             if (mqttNetClient.PushFilePath == "")
                 return;
             this.tb_publishPath.Text = mqttNetClient.PushFilePath;
+            this.lbx_conName.Text = mqttNetClient.ServerName;
+            IsConnected();
         }
 
         private void AnalysisConfig()

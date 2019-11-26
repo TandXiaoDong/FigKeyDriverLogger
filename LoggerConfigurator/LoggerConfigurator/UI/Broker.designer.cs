@@ -32,7 +32,7 @@
             Telerik.WinControls.UI.TableViewDefinition tableViewDefinition2 = new Telerik.WinControls.UI.TableViewDefinition();
             Telerik.WinControls.UI.TableViewDefinition tableViewDefinition3 = new Telerik.WinControls.UI.TableViewDefinition();
             this.radLabel1 = new Telerik.WinControls.UI.RadLabel();
-            this.radLabel3 = new Telerik.WinControls.UI.RadLabel();
+            this.lbx_conName = new Telerik.WinControls.UI.RadLabel();
             this.radLabel2 = new Telerik.WinControls.UI.RadLabel();
             this.tb_subscribe = new Telerik.WinControls.UI.RadTextBox();
             this.breezeTheme1 = new Telerik.WinControls.Themes.BreezeTheme();
@@ -47,8 +47,9 @@
             this.cb_subscribe_level = new Telerik.WinControls.UI.RadMultiColumnComboBox();
             this.cb_publish_level = new Telerik.WinControls.UI.RadMultiColumnComboBox();
             this.tb_publishTopic = new Telerik.WinControls.UI.RadMultiColumnComboBox();
+            this.lbx_mqttStatus = new Telerik.WinControls.UI.RadLabel();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lbx_conName)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tb_subscribe)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_subscribe)).BeginInit();
@@ -67,6 +68,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.tb_publishTopic)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tb_publishTopic.EditorControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tb_publishTopic.EditorControl.MasterTemplate)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lbx_mqttStatus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
             this.SuspendLayout();
             // 
@@ -79,14 +81,14 @@
             this.radLabel1.Text = "Connection：";
             this.radLabel1.ThemeName = "Material";
             // 
-            // radLabel3
+            // lbx_conName
             // 
-            this.radLabel3.Location = new System.Drawing.Point(115, 12);
-            this.radLabel3.Name = "radLabel3";
-            this.radLabel3.Size = new System.Drawing.Size(68, 21);
-            this.radLabel3.TabIndex = 2;
-            this.radLabel3.Text = "mybroker";
-            this.radLabel3.ThemeName = "Material";
+            this.lbx_conName.Location = new System.Drawing.Point(115, 12);
+            this.lbx_conName.Name = "lbx_conName";
+            this.lbx_conName.Size = new System.Drawing.Size(68, 21);
+            this.lbx_conName.TabIndex = 2;
+            this.lbx_conName.Text = "mybroker";
+            this.lbx_conName.ThemeName = "Material";
             // 
             // radLabel2
             // 
@@ -275,12 +277,24 @@
             this.tb_publishTopic.TabStop = false;
             this.tb_publishTopic.ThemeName = "Material";
             // 
+            // lbx_mqttStatus
+            // 
+            this.lbx_mqttStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbx_mqttStatus.Location = new System.Drawing.Point(215, 12);
+            this.lbx_mqttStatus.Name = "lbx_mqttStatus";
+            this.lbx_mqttStatus.Size = new System.Drawing.Size(68, 21);
+            this.lbx_mqttStatus.TabIndex = 24;
+            this.lbx_mqttStatus.Text = "mybroker";
+            this.lbx_mqttStatus.ThemeName = "Material";
+            // 
             // Broker
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Lavender;
             this.ClientSize = new System.Drawing.Size(781, 459);
+            this.Controls.Add(this.lbx_mqttStatus);
             this.Controls.Add(this.tb_publishTopic);
             this.Controls.Add(this.cb_publish_level);
             this.Controls.Add(this.cb_subscribe_level);
@@ -292,7 +306,7 @@
             this.Controls.Add(this.radLabel4);
             this.Controls.Add(this.btn_subscribe);
             this.Controls.Add(this.tb_subscribe);
-            this.Controls.Add(this.radLabel3);
+            this.Controls.Add(this.lbx_conName);
             this.Controls.Add(this.radLabel2);
             this.Controls.Add(this.radLabel1);
             this.Name = "Broker";
@@ -303,7 +317,7 @@
             this.Text = "Broker";
             this.ThemeName = "Material";
             ((System.ComponentModel.ISupportInitialize)(this.radLabel1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.radLabel3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lbx_conName)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radLabel2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tb_subscribe)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btn_subscribe)).EndInit();
@@ -322,6 +336,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.tb_publishTopic.EditorControl.MasterTemplate)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tb_publishTopic.EditorControl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tb_publishTopic)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.lbx_mqttStatus)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -331,7 +346,7 @@
         #endregion
 
         private Telerik.WinControls.UI.RadLabel radLabel1;
-        private Telerik.WinControls.UI.RadLabel radLabel3;
+        private Telerik.WinControls.UI.RadLabel lbx_conName;
         private Telerik.WinControls.UI.RadLabel radLabel2;
         private Telerik.WinControls.UI.RadTextBox tb_subscribe;
         private Telerik.WinControls.Themes.BreezeTheme breezeTheme1;
@@ -346,5 +361,6 @@
         private Telerik.WinControls.UI.RadMultiColumnComboBox cb_subscribe_level;
         private Telerik.WinControls.UI.RadMultiColumnComboBox cb_publish_level;
         private Telerik.WinControls.UI.RadMultiColumnComboBox tb_publishTopic;
+        private Telerik.WinControls.UI.RadLabel lbx_mqttStatus;
     }
 }

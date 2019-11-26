@@ -78,6 +78,9 @@ namespace LoggerConfigurator
         private string mqttClientTopicConfigFile = "/logger/client/sourchFile";
         #endregion
 
+        public delegate void DeletegateReceive(string receive);
+        public DeletegateReceive myDelegateReceive;
+
         public MainForm()
         {
             InitializeComponent();
@@ -89,7 +92,7 @@ namespace LoggerConfigurator
             Initial();
             InitConfig();
             LoadTreeView();
-            LoadRadGridView();
+            LoadRadGridView(); 
         }
 
         private void RadForm1_Load(object sender, EventArgs e)
@@ -116,11 +119,24 @@ namespace LoggerConfigurator
             this.menu_connect.Click += Menu_connect_Click;
             this.menu_disconnect.Click += Menu_disconnect_Click;
             this.FormClosed += MainForm_FormClosed;
+            mqttNetClient.deleteSendMsgEvent += MqttNetClient_deleteSendMsgEvent;
+            myDelegateReceive = new DeletegateReceive(RefreshControl);
+        }
+
+        private void MqttNetClient_deleteSendMsgEvent(string str)
+        {
+            //this.mqtt_status.beginInvoke(myDelegateReceive,str);
+            this.mqtt_status.Text = str;
+        }
+
+        private void RefreshControl(string str)
+        {
+            this.mqtt_status.Text = str;
         }
 
         private void Menu_disconnect_Click(object sender, EventArgs e)
         {
-            
+            mqttNetClient.StopConnection();
         }
 
         private void Menu_connect_Click(object sender, EventArgs e)
@@ -627,14 +643,29 @@ namespace LoggerConfigurator
             gridExportContent.AgreementTypeCan2 = agreementType2;
             gridExportContent.CurrentSelectCanType = currentCanType;
             ExportFile.ExportCanFile(path,sourcePath,gridExportContent);
-
             //导出数据成功后，选择发布格式与发布文件
+            if (!File.Exists(path))
+                return;
             if (mqttNetClient == null)
                 return;
             mqttNetClient.PushFilePath = path;
             mqttNetClient.IsPublishMessage = true;
-            Broker broker = new Broker(mqttNetClient);
-            broker.ShowDialog();
+            if (!mqttNetClient.IsConnectionSuccess)
+            {
+                //未连接
+                if (MessageBox.Show("生成文件完成！是否进入发布页面？", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) != DialogResult.OK)
+                    return;
+                AddConnection addConnection = new AddConnection(mqttNetClient);
+                addConnection.ShowDialog();
+            }
+            else
+            {
+                //已连接
+                if (MessageBox.Show("生成文件完成！是否进入发布页面？", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Information) != DialogResult.OK)
+                    return;
+                Broker broker = new Broker(mqttNetClient);
+                broker.ShowDialog();
+            }
         }
         #endregion
 
@@ -1214,5 +1245,10 @@ namespace LoggerConfigurator
             }
         }
         #endregion
+
+        public void ReceiveMqttStatus(string str)
+        {
+            this.mqtt_status.Text = str;
+        }
     }
 }

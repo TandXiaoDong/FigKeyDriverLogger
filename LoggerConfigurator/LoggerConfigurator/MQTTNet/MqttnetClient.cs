@@ -65,6 +65,8 @@ namespace LoggerConfigurator.MQTTNet
 
         public MqttFactory mqttFactory;
 
+        public bool isConnect = true;//默认可以重连
+
         public MqttClient MqttClientObj { get; set; }
 
         public IMqttClientOptions MqttClientOptions { get; set; }
@@ -142,11 +144,28 @@ namespace LoggerConfigurator.MQTTNet
         public string PushFilePath { get; set; }
 
         public bool IsPublishMessage { get; set; }
+
+        /// <summary>
+        /// 断开连接，不重连
+        /// </summary>
+        public bool IsReConnect
+        {
+            get { return this.isConnect; }
+            set { this.isConnect = value; }
+        }
+
+
         #endregion
 
         private MqttNetClient mqttNetClient;
         public delegate void MyDeleteMsg(string str);
-        private event MyDeleteMsg deleteSendMsg;
+        public event MyDeleteMsg deleteSendMsgEvent;
+        private bool IsFirstConnect  = true;
+
+        public void SendMessageUI(string sendString)
+        {
+            deleteSendMsgEvent(sendString);
+        }
 
         public MqttNetClient()
         {
@@ -177,6 +196,13 @@ namespace LoggerConfigurator.MQTTNet
                 }
                 mqttNetClient.MqttClientObj.ConnectAsync(mqttNetClient.MqttClientOptions);
 
+                //connected
+                if (mqttNetClient.MqttClientObj.IsConnected)
+                {
+                    IsConnectionSuccess = true;
+                    if(!IsFirstConnect)
+                        SendMessageUI("连接成功");
+                }
                 if (mqttNetClient.MqttClientObj.ConnectedHandler == null)
                     mqttNetClient.MqttClientObj.ConnectedHandler = new MqttClientConnectedHandlerDelegate(new Func<MqttClientConnectedEventArgs, Task>(Connected));
                 
@@ -195,6 +221,9 @@ namespace LoggerConfigurator.MQTTNet
         async public void StopConnection()
         {
             await mqttNetClient.MqttClientObj.DisconnectAsync();
+            IsConnectionSuccess = false;
+            IsReConnect = false ;
+            IsFirstConnect = true; 
         }
 
         /// <summary>
@@ -375,7 +404,12 @@ namespace LoggerConfigurator.MQTTNet
             try
             {
                 mqttNetClient.IsConnectionSuccessful = true;
-                await Task.Delay(TimeSpan.FromSeconds(5));
+                if (IsFirstConnect)
+                {
+                    SendMessageUI("连接成功");
+                    IsFirstConnect = false;
+                }
+                //await Task.Delay(TimeSpan.FromSeconds(5));
                 LogHelper.Log.Info("Connected >>Success");
             }
             catch (Exception exp)
@@ -395,9 +429,17 @@ namespace LoggerConfigurator.MQTTNet
             {
                 LogHelper.Log.Info("Disconnected >>Disconnected Server");
                 mqttNetClient.IsConnectionSuccessful = false;
-                await Task.Delay(TimeSpan.FromSeconds(5));
+                IsFirstConnect = true;
                 try
                 {
+                    if (!IsReConnect)
+                    {//不重连
+                        SendMessageUI("断开连接");
+                        return;
+                    }
+                    //重连
+                    SendMessageUI("连接失败");
+                    await Task.Delay(TimeSpan.FromSeconds(3));
                     await mqttNetClient.MqttClientObj.ConnectAsync(mqttNetClient.MqttClientOptions);
                 }
                 catch (Exception exp)
@@ -425,7 +467,7 @@ namespace LoggerConfigurator.MQTTNet
                 string Retained = e.ApplicationMessage.Retain.ToString();
                 LogHelper.Log.Info("MessageReceived >>Topic:" + Topic + "; QoS: " + QoS + "; Retained: " + Retained + ";");
                 LogHelper.Log.Info("MessageReceived >>Msg: " + text);
-                deleteSendMsg.Invoke(text);
+                SendMessageUI(text);
             }
             catch (Exception exp)
             {
