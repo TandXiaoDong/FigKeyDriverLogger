@@ -99,9 +99,9 @@
             this.cb_baud_can1 = new Telerik.WinControls.UI.RadMultiColumnComboBox();
             this.toolWindow_left = new Telerik.WinControls.UI.Docking.ToolWindow();
             this.radDock1 = new Telerik.WinControls.UI.Docking.RadDock();
-            this.toolTabStrip4 = new Telerik.WinControls.UI.Docking.ToolTabStrip();
             this.toolWindow1 = new Telerik.WinControls.UI.Docking.ToolWindow();
             this.rTreeViewList = new Telerik.WinControls.UI.RadTreeView();
+            this.toolTabStrip4 = new Telerik.WinControls.UI.Docking.ToolTabStrip();
             this.toolTabStrip2 = new Telerik.WinControls.UI.Docking.ToolTabStrip();
             this.radLabelElement1 = new Telerik.WinControls.UI.RadLabelElement();
             this.radStatusBarPanelElement1 = new Telerik.WinControls.UI.RadStatusBarPanelElement();
@@ -147,10 +147,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.cb_baud_can1.EditorControl.MasterTemplate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.radDock1)).BeginInit();
             this.radDock1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.toolTabStrip4)).BeginInit();
-            this.toolTabStrip4.SuspendLayout();
             this.toolWindow1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.rTreeViewList)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.toolTabStrip4)).BeginInit();
+            this.toolTabStrip4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.toolTabStrip2)).BeginInit();
             this.toolTabStrip2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.radStatusStrip1)).BeginInit();
@@ -497,7 +497,7 @@
             // 
             // 
             this.documentTabStrip1.RootElement.MinSize = new System.Drawing.Size(25, 25);
-            this.documentTabStrip1.SelectedIndex = 2;
+            this.documentTabStrip1.SelectedIndex = 1;
             this.documentTabStrip1.Size = new System.Drawing.Size(969, 661);
             this.documentTabStrip1.TabIndex = 0;
             this.documentTabStrip1.TabStop = false;
@@ -786,7 +786,7 @@
             // 
             // radDock1
             // 
-            this.radDock1.ActiveWindow = this.toolWindow1;
+            this.radDock1.ActiveWindow = this.documentWindow_can1;
             this.radDock1.CausesValidation = false;
             this.radDock1.Controls.Add(this.toolTabStrip4);
             this.radDock1.Controls.Add(this.documentContainer2);
@@ -805,25 +805,6 @@
             this.radDock1.TabIndex = 7;
             this.radDock1.TabStop = false;
             this.radDock1.ThemeName = "Material";
-            // 
-            // toolTabStrip4
-            // 
-            this.toolTabStrip4.CanUpdateChildIndex = true;
-            this.toolTabStrip4.CausesValidation = false;
-            this.toolTabStrip4.Controls.Add(this.toolWindow1);
-            this.toolTabStrip4.Location = new System.Drawing.Point(0, 0);
-            this.toolTabStrip4.Name = "toolTabStrip4";
-            // 
-            // 
-            // 
-            this.toolTabStrip4.RootElement.MinSize = new System.Drawing.Size(25, 25);
-            this.toolTabStrip4.SelectedIndex = 0;
-            this.toolTabStrip4.Size = new System.Drawing.Size(260, 661);
-            this.toolTabStrip4.SizeInfo.AbsoluteSize = new System.Drawing.Size(260, 200);
-            this.toolTabStrip4.SizeInfo.SplitterCorrection = new System.Drawing.Size(60, 0);
-            this.toolTabStrip4.TabIndex = 3;
-            this.toolTabStrip4.TabStop = false;
-            this.toolTabStrip4.ThemeName = "Material";
             // 
             // toolWindow1
             // 
@@ -848,6 +829,25 @@
             this.rTreeViewList.SpacingBetweenNodes = -1;
             this.rTreeViewList.TabIndex = 0;
             this.rTreeViewList.ThemeName = "Breeze";
+            // 
+            // toolTabStrip4
+            // 
+            this.toolTabStrip4.CanUpdateChildIndex = true;
+            this.toolTabStrip4.CausesValidation = false;
+            this.toolTabStrip4.Controls.Add(this.toolWindow1);
+            this.toolTabStrip4.Location = new System.Drawing.Point(0, 0);
+            this.toolTabStrip4.Name = "toolTabStrip4";
+            // 
+            // 
+            // 
+            this.toolTabStrip4.RootElement.MinSize = new System.Drawing.Size(25, 25);
+            this.toolTabStrip4.SelectedIndex = 0;
+            this.toolTabStrip4.Size = new System.Drawing.Size(260, 661);
+            this.toolTabStrip4.SizeInfo.AbsoluteSize = new System.Drawing.Size(260, 200);
+            this.toolTabStrip4.SizeInfo.SplitterCorrection = new System.Drawing.Size(60, 0);
+            this.toolTabStrip4.TabIndex = 3;
+            this.toolTabStrip4.TabStop = false;
+            this.toolTabStrip4.ThemeName = "Material";
             // 
             // toolTabStrip2
             // 
@@ -968,10 +968,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.cb_baud_can1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.radDock1)).EndInit();
             this.radDock1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.toolTabStrip4)).EndInit();
-            this.toolTabStrip4.ResumeLayout(false);
             this.toolWindow1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.rTreeViewList)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.toolTabStrip4)).EndInit();
+            this.toolTabStrip4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.toolTabStrip2)).EndInit();
             this.toolTabStrip2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.radStatusStrip1)).EndInit();
